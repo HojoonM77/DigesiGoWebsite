@@ -1,915 +1,409 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DigesiGo — AI Gut Health Tracker</title>
-  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <style>
-    /* ── Reset & Base ─────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg:        #080c08;
-      --surface:   #0f150f;
-      --surface2:  #162016;
-      --surface3:  #1c2a1c;
-      --border:    #1e3320;
-      --green:     #00e676;
-      --green-dim: #00c853;
-      --green-dark:#004d20;
-      --green-glow:rgba(0,230,118,.18);
-      --text:      #d4e8d4;
-      --text-dim:  #7a9b7a;
-      --text-muted:#3d5c3d;
-      --user-bubble:#0d2e1a;
-      --ai-bubble:  #0f1f0f;
-      --danger:    #ff5252;
-      --warn:      #ffab40;
-      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      --mono: 'Courier New', monospace;
-    }
-    html, body, #root { height: 100%; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font);
-      font-size: 14px;
-      line-height: 1.5;
-      overflow: hidden;
-    }
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--surface); }
-    ::-webkit-scrollbar-thumb { background: var(--green-dark); border-radius: 3px; }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DigestiGo — Track While Conversing</title>
+  <meta name="description" content="DigestiGo uses AI conversations to track your diet, activity, digestive symptoms, and energy. Know your gut."/>
 
-    /* ── App Shell ────────────────────────────────────────── */
-    .app { display: flex; flex-direction: column; height: 100vh; }
-
-    /* ── Header ───────────────────────────────────────────── */
-    .header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px;
-      height: 56px;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-      z-index: 10;
-    }
-    .logo {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 18px; font-weight: 700; letter-spacing: -.3px;
-    }
-    .logo-icon {
-      width: 32px; height: 32px;
-      background: var(--green);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
-    }
-    .logo span { color: var(--green); }
-    .header-right { display: flex; align-items: center; gap: 16px; }
-    .status-pill {
-      display: flex; align-items: center; gap: 6px;
-      padding: 4px 12px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      font-size: 12px; color: var(--text-dim);
-    }
-    .status-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 6px var(--green);
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-    .date-badge {
-      font-size: 12px; color: var(--text-muted);
-      font-family: var(--mono);
-    }
-
-    /* ── Nav Tabs ─────────────────────────────────────────── */
-    .nav { display:flex; gap:2px; padding:0 24px; background:var(--surface); border-bottom:1px solid var(--border); flex-shrink:0; }
-    .nav-btn {
-      padding: 12px 20px;
-      background: none; border: none; cursor: pointer;
-      color: var(--text-dim); font-size: 13px; font-family: var(--font);
-      border-bottom: 2px solid transparent;
-      transition: all .2s;
-      display: flex; align-items: center; gap: 7px;
-    }
-    .nav-btn:hover { color: var(--text); }
-    .nav-btn.active { color: var(--green); border-bottom-color: var(--green); }
-    .nav-btn .badge {
-      background: var(--green-dark); color: var(--green);
-      font-size: 10px; padding: 1px 6px; border-radius: 10px; font-weight: 600;
-    }
-
-    /* ── Main Content ─────────────────────────────────────── */
-    .main { flex: 1; overflow: hidden; display: flex; }
-
-    /* ── CHAT PAGE ────────────────────────────────────────── */
-    .chat-page { display:flex; width:100%; height:100%; }
-    .chat-sidebar {
-      width: 260px; flex-shrink:0;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      display: flex; flex-direction: column;
-      overflow: hidden;
-    }
-    .sidebar-section { padding: 16px; border-bottom: 1px solid var(--border); }
-    .sidebar-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 12px; }
-    .quick-stat {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 8px 10px; margin-bottom: 6px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-    }
-    .qs-left { display:flex; align-items:center; gap:8px; }
-    .qs-icon { font-size:15px; }
-    .qs-label { font-size:12px; color:var(--text-dim); }
-    .qs-val { font-size:13px; font-weight:600; color:var(--green); font-family:var(--mono); }
-    .sidebar-tips { padding:16px; overflow-y:auto; flex:1; }
-    .tip-item {
-      padding: 8px 10px; margin-bottom:8px;
-      background: var(--surface2); border:1px solid var(--border);
-      border-radius: 8px; font-size:11px; color:var(--text-dim);
-      display:flex; gap:8px; align-items:flex-start;
-    }
-    .tip-item .icon { color:var(--green); flex-shrink:0; }
-    .prompt-chip-list { display:flex; flex-direction:column; gap:6px; }
-    .prompt-chip {
-      padding:8px 10px;
-      background:var(--surface2); border:1px solid var(--border);
-      border-radius:8px; cursor:pointer; font-size:11px; color:var(--text-dim);
-      text-align:left; font-family:var(--font);
-      transition:all .15s;
-    }
-    .prompt-chip:hover { border-color:var(--green-dim); color:var(--text); background:var(--surface3); }
-
-    /* Chat area */
-    .chat-main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
-    .chat-messages {
-      flex:1; overflow-y:auto; padding:24px 28px;
-      display:flex; flex-direction:column; gap:16px;
-    }
-    .msg { display:flex; gap:10px; max-width:72%; animation: fadeUp .25s ease; }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-    .msg.user { align-self:flex-end; flex-direction:row-reverse; }
-    .msg.ai { align-self:flex-start; }
-    .avatar {
-      width:32px; height:32px; border-radius:50%; flex-shrink:0;
-      display:flex; align-items:center; justify-content:center; font-size:15px;
-    }
-    .avatar.ai { background:var(--green-dark); border:1px solid var(--green-dim); color:var(--green); }
-    .avatar.user { background:var(--surface3); border:1px solid var(--border); }
-    .bubble {
-      padding:10px 14px; border-radius:16px; font-size:13px; line-height:1.55;
-    }
-    .msg.user .bubble { background:var(--user-bubble); border:1px solid #1a4a2e; border-bottom-right-radius:4px; }
-    .msg.ai .bubble { background:var(--ai-bubble); border:1px solid var(--border); border-bottom-left-radius:4px; }
-    .bubble-meta { font-size:10px; color:var(--text-muted); margin-top:4px; }
-    .msg.user .bubble-meta { text-align:right; }
-
-    /* Logged cards inside bubbles */
-    .log-card {
-      margin-top: 8px; padding: 8px 10px;
-      background: var(--surface2); border:1px solid var(--green-dark);
-      border-radius: 8px; font-size: 11px;
-    }
-    .log-card-title { color:var(--green); font-weight:600; margin-bottom:4px; font-size:11px; }
-    .log-card-row { display:flex; justify-content:space-between; color:var(--text-dim); padding:2px 0; }
-    .log-card-val { color:var(--text); font-family:var(--mono); }
-
-    /* Typing indicator */
-    .typing { display:flex; align-items:center; gap:4px; padding:12px 14px; }
-    .typing span {
-      width:7px; height:7px; border-radius:50%; background:var(--green);
-      animation: blink 1.2s infinite;
-    }
-    .typing span:nth-child(2){animation-delay:.2s}
-    .typing span:nth-child(3){animation-delay:.4s}
-    @keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
-
-    /* Chat input */
-    .chat-input-wrap {
-      padding:16px 28px; border-top:1px solid var(--border);
-      background:var(--surface); flex-shrink:0;
-    }
-    .chat-input-row { display:flex; gap:10px; align-items:flex-end; }
-    .chat-textarea {
-      flex:1; padding:10px 14px;
-      background:var(--surface2); border:1px solid var(--border);
-      border-radius:12px; color:var(--text); font-family:var(--font); font-size:13px;
-      resize:none; min-height:42px; max-height:120px;
-      transition:border-color .2s;
-      outline:none;
-    }
-    .chat-textarea:focus { border-color:var(--green-dim); }
-    .chat-textarea::placeholder { color:var(--text-muted); }
-    .send-btn {
-      width:42px; height:42px; border-radius:12px;
-      background:var(--green); border:none; cursor:pointer;
-      display:flex; align-items:center; justify-content:center;
-      color:#000; font-size:18px; transition:all .15s; flex-shrink:0;
-    }
-    .send-btn:hover { background:#00ff88; box-shadow:0 0 16px var(--green-glow); }
-    .send-btn:disabled { background:var(--green-dark); color:var(--text-muted); cursor:not-allowed; }
-    .input-hints { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
-    .hint-chip {
-      padding:3px 9px; background:var(--surface2); border:1px solid var(--border);
-      border-radius:10px; font-size:11px; color:var(--text-muted); cursor:pointer;
-      transition:all .15s;
-    }
-    .hint-chip:hover { border-color:var(--green-dim); color:var(--text); }
-
-    /* ── DASHBOARD PAGE ───────────────────────────────────── */
-    .dashboard { width:100%; height:100%; overflow-y:auto; padding:24px 28px; }
-    .dash-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px; }
-    .stat-card {
-      padding:16px 18px;
-      background:var(--surface); border:1px solid var(--border);
-      border-radius:12px; position:relative; overflow:hidden;
-    }
-    .stat-card::before {
-      content:''; position:absolute; top:0; left:0; right:0; height:2px;
-      background:var(--green);
-    }
-    .stat-card .sc-label { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.8px; }
-    .stat-card .sc-val { font-size:28px; font-weight:700; color:var(--green); font-family:var(--mono); margin:4px 0 2px; }
-    .stat-card .sc-sub { font-size:11px; color:var(--text-dim); }
-    .stat-card .sc-icon { position:absolute; top:14px; right:14px; font-size:22px; opacity:.3; }
-
-    .dash-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px; }
-    .dash-row.three { grid-template-columns:1fr 1fr 1fr; }
-    .panel {
-      background:var(--surface); border:1px solid var(--border);
-      border-radius:12px; padding:18px 20px;
-    }
-    .panel-title { font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.8px; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
-    .panel-title .dot { width:7px;height:7px;border-radius:50%;background:var(--green); }
-
-    /* Bar chart */
-    .bar-chart { display:flex; align-items:flex-end; gap:8px; height:100px; }
-    .bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
-    .bar { width:100%; border-radius:4px 4px 0 0; background:var(--green-dark); transition:height .4s ease; position:relative; }
-    .bar.active { background:var(--green); box-shadow:0 0 8px var(--green-glow); }
-    .bar-label { font-size:10px; color:var(--text-muted); font-family:var(--mono); }
-    .bar-val { font-size:9px; color:var(--text-dim); position:absolute; top:-14px; width:100%; text-align:center; }
-
-    /* Line chart SVG */
-    .line-chart-wrap { width:100%; height:110px; }
-
-    /* Log table */
-    .log-table { width:100%; border-collapse:collapse; }
-    .log-table th { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.8px; text-align:left; padding:0 0 10px; border-bottom:1px solid var(--border); }
-    .log-table td { padding:8px 0; border-bottom:1px solid #0e1e0e; font-size:12px; vertical-align:middle; }
-    .log-table tr:last-child td { border-bottom:none; }
-    .tag {
-      display:inline-block; padding:2px 8px; border-radius:10px; font-size:10px;
-      font-weight:600; text-transform:uppercase; letter-spacing:.5px;
-    }
-    .tag.food   { background:#0a2e1a; color:#69f0ae; }
-    .tag.active { background:#0a1a2e; color:#40c4ff; }
-    .tag.symptom{ background:#2e1a0a; color:#ffab40; }
-    .tag.energy { background:#1a0a2e; color:#ce93d8; }
-
-    /* Symptom severity gauge */
-    .gauge-list { display:flex; flex-direction:column; gap:10px; }
-    .gauge-item { display:flex; flex-direction:column; gap:4px; }
-    .gauge-row { display:flex; justify-content:space-between; font-size:11px; }
-    .gauge-label { color:var(--text-dim); }
-    .gauge-val { color:var(--text); font-family:var(--mono); }
-    .gauge-bar { height:6px; border-radius:3px; background:var(--surface3); overflow:hidden; }
-    .gauge-fill { height:100%; border-radius:3px; transition:width .6s ease; }
-
-    /* Energy ring */
-    .energy-ring { display:flex; align-items:center; gap:16px; }
-    .ring-svg { flex-shrink:0; }
-    .ring-info { display:flex; flex-direction:column; gap:6px; }
-    .ring-stat { display:flex; align-items:center; gap:8px; font-size:12px; }
-    .ring-dot { width:8px;height:8px;border-radius:50%; }
-
-    /* Insight cards */
-    .insight-list { display:flex; flex-direction:column; gap:10px; }
-    .insight-card {
-      padding:10px 12px; border-radius:8px; font-size:12px;
-      border-left:3px solid var(--green); background:var(--surface2);
-      color:var(--text-dim);
-    }
-    .insight-card.warn { border-left-color:var(--warn); }
-    .insight-card.danger { border-left-color:var(--danger); }
-    .insight-card strong { color:var(--text); display:block; margin-bottom:2px; font-size:11px; }
-
-    /* ── HISTORY PAGE ─────────────────────────────────────── */
-    .history-page { width:100%; height:100%; overflow-y:auto; padding:24px 28px; }
-    .timeline { display:flex; flex-direction:column; gap:0; }
-    .timeline-day { margin-bottom:24px; }
-    .timeline-date {
-      font-size:11px; color:var(--green); font-family:var(--mono);
-      text-transform:uppercase; letter-spacing:1px;
-      margin-bottom:12px; display:flex; align-items:center; gap:10px;
-    }
-    .timeline-date::after { content:''; flex:1; height:1px; background:var(--border); }
-    .timeline-entries { display:flex; flex-direction:column; gap:8px; }
-    .tl-entry {
-      display:flex; gap:14px; align-items:flex-start;
-      padding:10px 14px; border-radius:10px;
-      background:var(--surface); border:1px solid var(--border);
-    }
-    .tl-time { font-size:11px; color:var(--text-muted); font-family:var(--mono); min-width:42px; padding-top:1px; }
-    .tl-icon { font-size:16px; min-width:20px; }
-    .tl-body { flex:1; }
-    .tl-title { font-size:13px; color:var(--text); margin-bottom:2px; }
-    .tl-detail { font-size:11px; color:var(--text-dim); }
-
-    /* Empty state */
-    .empty-state { text-align:center; padding:60px 20px; color:var(--text-muted); }
-    .empty-state .es-icon { font-size:48px; margin-bottom:12px; }
-    .empty-state p { font-size:14px; margin-bottom:6px; color:var(--text-dim); }
-    .empty-state small { font-size:12px; }
-  </style>
+  <link rel="stylesheet" href="css/variables.css"/>
+  <link rel="stylesheet" href="css/nav.css"/>
+  <link rel="stylesheet" href="css/footer.css"/>
+  <link rel="stylesheet" href="css/landing.css"/>
 </head>
 <body>
-<div id="root"></div>
 
-<script type="text/babel">
-const { useState, useEffect, useRef, useCallback } = React;
+<!-- ── NAV ─────────────────────────────────────────────────────── -->
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">🫁</div>
+      Digesti<span>Go</span>
+    </a>
+    <div class="nav-links">
+      <a href="features.html">Features</a>
+      <a href="#how">How It Works</a>
+      <a href="#demo">Live Demo</a>
+      <a href="about.html">About</a>
+    </div>
+    <a href="#cta" class="nav-cta">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      Download iOS App
+    </a>
+  </div>
+</nav>
 
-/* ─── AI Response Engine ───────────────────────────────────────── */
-const INTENTS = {
-  food: /ate|eat|eaten|had|breakfast|lunch|dinner|snack|meal|drank|drink|drank|consumed|calories|fiber|protein|carbs|fat|burger|pizza|salad|fruit|vegetable|soup|rice|bread|pasta|coffee|tea|water|juice|smoothie|yogurt|oats|egg|chicken|fish|beef/i,
-  activity: /walk|walked|run|ran|jog|jogged|exercise|gym|swim|swam|yoga|cycle|biked|steps|workout|training|stretch|squat|lift|hiit|cardio|active|sport/i,
-  symptom: /bloat|bloating|gas|gassy|cramp|cramping|pain|ache|constipat|diarrhea|nausea|nauseous|stool|bowel|ibs|reflux|heartburn|indigestion|burp|full|uncomfortable|distended/i,
-  energy: /tired|fatigue|exhausted|energy|energetic|sluggish|alert|awake|sleepy|refresh|motivated|lazy|lethargic|mood|feel|feeling/i,
-};
-
-const FOOD_PARSE = /(\d+)?\s*(cal|calorie|kcal)/i;
-const FIBER_PARSE = /(\d+)\s*g?\s*(fiber|fibre)/i;
-
-function parseFood(text) {
-  const cals = text.match(FOOD_PARSE);
-  const fiber = text.match(FIBER_PARSE);
-  const portions = text.match(/(\d+)\s*(cup|bowl|piece|slice|serving|gram|oz|ml)/i);
-  return {
-    calories: cals ? parseInt(cals[1]) : Math.floor(Math.random()*400)+100,
-    fiber: fiber ? parseInt(fiber[1]) : Math.floor(Math.random()*8)+1,
-    portion: portions ? portions[0] : '1 serving',
-  };
-}
-
-function detectFood(text) {
-  const foods = ['oatmeal','eggs','toast','yogurt','salad','pasta','rice','soup','chicken','fish','fruits','vegetables','sandwich','coffee','tea','water','smoothie','steak','salmon','avocado','pizza','burger','broccoli'];
-  return foods.filter(f => text.toLowerCase().includes(f));
-}
-
-function detectActivity(text) {
-  const acts = ['walk','run','jog','yoga','gym','swim','cycle','hike','stretch','lift','cardio','hiit'];
-  return acts.filter(a => text.toLowerCase().includes(a));
-}
-
-function detectSymptoms(text) {
-  const syms = ['bloating','gas','cramping','pain','nausea','constipation','diarrhea','reflux','heartburn','discomfort','indigestion','fullness'];
-  return syms.filter(s => text.toLowerCase().includes(s));
-}
-
-const SEVERITY = { mild:1, moderate:2, severe:3, bad:2, terrible:3, slight:1, little:1, lot:3, intense:3 };
-function parseSeverity(text) {
-  for (const [k,v] of Object.entries(SEVERITY)) if (text.toLowerCase().includes(k)) return v;
-  return 2;
-}
-
-const RESPONSES = {
-  food: (items, data) => {
-    const itemStr = items.length ? items.join(', ') : 'your meal';
-    const fibNote = data.fiber >= 5 ? 'Great fiber content — this supports gut motility!' : data.fiber <= 2 ? 'That\'s low in fiber. Consider adding leafy greens or legumes.' : 'Decent fiber intake.';
-    return {
-      text: `Logged! I recorded **${itemStr}** (~${data.calories} kcal, ${data.fiber}g fiber). ${fibNote} How\'s your digestive comfort after eating?`,
-      card: { type:'food', title:'🥦 Food Log', data: { 'Item(s)': itemStr, 'Est. Calories': `${data.calories} kcal`, 'Fiber': `${data.fiber}g`, 'Portion': data.portion } }
-    };
-  },
-  activity: (acts, text) => {
-    const actStr = acts.length ? acts.join(', ') : 'activity';
-    const durationMatch = text.match(/(\d+)\s*(min|minute|hour|hr)/i);
-    const duration = durationMatch ? durationMatch[0] : '30 min';
-    const steps = text.match(/(\d[\d,]+)\s*step/i);
-    return {
-      text: `Activity logged! ${actStr} for ${duration} is excellent for gut motility — physical activity stimulates peristalsis and can reduce bloating. Keep it up! Any digestive symptoms before or after?`,
-      card: { type:'activity', title:'🏃 Activity Log', data: { 'Activity': actStr, 'Duration': duration, 'Steps': steps ? steps[1] : 'N/A', 'Gut Benefit': 'Motility ↑' } }
-    };
-  },
-  symptom: (syms, text) => {
-    const severity = parseSeverity(text);
-    const sevLabel = ['','Mild','Moderate','Severe'][severity];
-    const symStr = syms.length ? syms.join(', ') : 'symptom';
-    const tips = {
-      bloating:'Try peppermint tea or a gentle walk. Avoid carbonated drinks.',
-      gas:'Reduce FODMAP foods like beans, lentils, onions temporarily.',
-      cramping:'Stay hydrated and apply a warm compress to the abdomen.',
-      nausea:'Ginger tea or small sips of water may help. Rest upright.',
-      reflux:'Avoid lying down for 2–3 hours after eating. Elevate head during sleep.',
-    };
-    const tip = tips[syms[0]] || 'Stay hydrated and rest. Track if it worsens.';
-    return {
-      text: `Symptom logged as **${sevLabel} ${symStr}**. ${tip} I\'ll track this pattern over time. When did this start — before or after a meal?`,
-      card: { type:'symptom', title:'⚠️ Symptom Log', data: { 'Symptom': symStr, 'Severity': sevLabel + ` (${severity}/3)`, 'Tip': tip.slice(0,30)+'...' } }
-    };
-  },
-  energy: (text) => {
-    const level = /high|great|good|energetic|great|alert|refresh|motivated/i.test(text) ? 'High' : /low|tired|fatigue|slug|exhaust|letharg/i.test(text) ? 'Low' : 'Moderate';
-    const score = level==='High' ? 8 : level==='Low' ? 3 : 5;
-    const note = level==='Low' ? 'Low energy can be linked to gut inflammation or poor nutrient absorption. Try a light protein snack and stay hydrated.' : level==='High' ? 'Great! High energy often correlates with good gut health and balanced nutrition.' : 'Moderate energy. Ensure you\'re hitting your fiber and hydration targets.';
-    return {
-      text: `Energy logged as **${level}** (${score}/10). ${note}`,
-      card: { type:'energy', title:'⚡ Energy Log', data: { 'Level': level, 'Score': `${score}/10`, 'Linked to': 'Gut absorption', 'Note': note.slice(0,25)+'...' } }
-    };
-  },
-  greeting: () => ({ text: 'Hey! I\'m DigestiBot, your gut health AI assistant 🌿 Tell me what you\'ve eaten, any activity you\'ve done, digestive symptoms you\'re experiencing, or how your energy feels. I\'ll track it all and help you understand your gut patterns.', card: null }),
-  help: () => ({ text: 'I can track:\n• **🥦 Food & Diet** — "I had oatmeal for breakfast with 4g fiber"\n• **🏃 Activity** — "I went for a 30-minute jog"\n• **⚠️ Symptoms** — "I\'m experiencing mild bloating after lunch"\n• **⚡ Energy** — "Feeling low energy this afternoon"\n\nJust tell me naturally and I\'ll log it!', card: null }),
-  fallback: () => ({ text: 'I\'m here to help track your gut health! Tell me about a meal you had, physical activity, any digestive symptoms, or your energy level. You can speak naturally — I\'ll pick up the details.', card: null }),
-};
-
-function generateResponse(text) {
-  const lower = text.toLowerCase();
-  if (/^(hi|hello|hey|good morning|good evening|howdy)/i.test(lower.trim())) return RESPONSES.greeting();
-  if (/help|what can you|how do i|how does/i.test(lower)) return RESPONSES.help();
-  if (INTENTS.symptom.test(text)) { const s=detectSymptoms(text); return RESPONSES.symptom(s,text); }
-  if (INTENTS.food.test(text)) { const items=detectFood(text); const data=parseFood(text); return RESPONSES.food(items,data); }
-  if (INTENTS.activity.test(text)) { const acts=detectActivity(text); return RESPONSES.activity(acts,text); }
-  if (INTENTS.energy.test(text)) return RESPONSES.energy(text);
-  return RESPONSES.fallback();
-}
-
-/* ─── Chart Components ─────────────────────────────────────────── */
-function BarChart({ data, color = '#00e676' }) {
-  const max = Math.max(...data.map(d => d.val), 1);
-  return (
-    <div className="bar-chart">
-      {data.map((d, i) => (
-        <div key={i} className="bar-col">
-          <div className={`bar ${d.today ? 'active' : ''}`} style={{ height: `${(d.val/max)*80}px`, background: d.today ? color : undefined }}>
-            <span className="bar-val">{d.val}</span>
-          </div>
-          <span className="bar-label">{d.label}</span>
+<!-- ── HERO ────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <div class="hero-badge"><div class="dot"></div> AI-Powered Gut Health Tracker</div>
+        <h1>Track While<br/><em>Conversing.</em></h1>
+        <p class="hero-sub">
+          DigestiGo uses AI conversations to log your diet, activity, digestive symptoms, and energy — no forms, no tapping. Just talk naturally and let the AI do the work.
+        </p>
+        <div class="hero-actions">
+          <a href="#cta" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            Download on iOS
+          </a>
+          <a href="#demo" class="btn-secondary">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16"/></svg>
+            See Live Demo
+          </a>
         </div>
-      ))}
-    </div>
-  );
-}
-
-function LineChart({ data, color = '#00e676' }) {
-  const W = 320, H = 90, PAD = 10;
-  const vals = data.map(d => d.val);
-  const max = Math.max(...vals, 1), min = Math.min(...vals, 0);
-  const range = max - min || 1;
-  const pts = vals.map((v, i) => {
-    const x = PAD + (i / (vals.length - 1)) * (W - PAD * 2);
-    const y = PAD + (1 - (v - min) / range) * (H - PAD * 2);
-    return [x, y];
-  });
-  const polyline = pts.map(p => p.join(',')).join(' ');
-  const area = `${pts[0][0]},${H} ${polyline} ${pts[pts.length-1][0]},${H}`;
-  return (
-    <div className="line-chart-wrap">
-      <svg viewBox={`0 0 ${W} ${H}`} width="100%" height="100%" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id={`grad-${color.replace('#','')}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity=".3"/>
-            <stop offset="100%" stopColor={color} stopOpacity="0"/>
-          </linearGradient>
-        </defs>
-        <polygon points={area} fill={`url(#grad-${color.replace('#','')})`}/>
-        <polyline points={polyline} fill="none" stroke={color} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round"/>
-        {pts.map(([x,y],i) => <circle key={i} cx={x} cy={y} r={i===pts.length-1?4:2.5} fill={i===pts.length-1?color:'#0f150f'} stroke={color} strokeWidth="1.5"/>)}
-      </svg>
-    </div>
-  );
-}
-
-function GaugeBar({ label, val, max, color }) {
-  const pct = Math.round((val/max)*100);
-  return (
-    <div className="gauge-item">
-      <div className="gauge-row"><span className="gauge-label">{label}</span><span className="gauge-val">{val}/{max}</span></div>
-      <div className="gauge-bar"><div className="gauge-fill" style={{width:`${pct}%`,background:color}}/></div>
-    </div>
-  );
-}
-
-function EnergyRing({ score }) {
-  const R = 36, C = 2*Math.PI*R;
-  const pct = score/10;
-  const dash = C*pct, gap = C*(1-pct);
-  return (
-    <svg className="ring-svg" width="90" height="90" viewBox="0 0 90 90">
-      <circle cx="45" cy="45" r={R} fill="none" stroke="#162016" strokeWidth="8"/>
-      <circle cx="45" cy="45" r={R} fill="none" stroke="#00e676" strokeWidth="8"
-        strokeDasharray={`${dash} ${gap}`} strokeLinecap="round"
-        transform="rotate(-90 45 45)" style={{transition:'stroke-dasharray .6s ease'}}/>
-      <text x="45" y="48" textAnchor="middle" fill="#00e676" fontSize="16" fontWeight="700" fontFamily="Courier New">{score}</text>
-      <text x="45" y="60" textAnchor="middle" fill="#7a9b7a" fontSize="9">/10</text>
-    </svg>
-  );
-}
-
-/* ─── Mock data seeder ─────────────────────────────────────────── */
-function seedData() {
-  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  return {
-    calorieWeek: days.map((d,i) => ({ label:d, val:[1800,2100,1650,2200,1900,2400,1750][i], today:i===6 })),
-    fiberWeek:   days.map((d,i) => ({ label:d, val:[22,18,28,15,24,30,19][i], today:i===6 })),
-    stepsWeek:   days.map((d,i) => ({ label:d, val:[6200,8100,4500,9200,7400,10500,5800][i], today:i===6 })),
-    energyWeek:  days.map((d,i) => ({ label:d, val:[6,7,5,8,6,9,5][i] })),
-    symptoms:    [
-      { label:'Bloating', val:2, max:5, color:'#ffab40' },
-      { label:'Gas', val:1, max:5, color:'#ff7043' },
-      { label:'Cramping', val:1, max:5, color:'#ff5252' },
-      { label:'Nausea', val:0, max:5, color:'#ab47bc' },
-      { label:'Reflux', val:0, max:5, color:'#ef5350' },
-    ],
-    todayStats: { calories:1750, fiber:19, steps:5800, energy:5, water:6, meals:3 },
-  };
-}
-
-/* ─── Hint chips ───────────────────────────────────────────────── */
-const HINTS = [
-  'I had oatmeal for breakfast',
-  'Went for a 20-min walk',
-  'Mild bloating after dinner',
-  'Feeling low energy today',
-  'Drank 8 glasses of water',
-];
-const SIDEBAR_PROMPTS = [
-  '🥑 Log a meal',
-  '🏃 Log an activity',
-  '😣 Log a symptom',
-  '⚡ Log my energy',
-  '💧 Log water intake',
-];
-
-/* ─── App ──────────────────────────────────────────────────────── */
-function App() {
-  const [tab, setTab] = useState('chat');
-  const [messages, setMessages] = useState([
-    { id:1, role:'ai', text:'Hello! I\'m **DigestiBot**, your AI gut health companion 🌿\n\nI\'m here to help you track your **diet**, **activity**, **digestive symptoms**, and **energy levels** — all through natural conversation.\n\nTell me what you\'ve eaten today, any symptoms you\'re feeling, or activities you\'ve done, and I\'ll log everything and offer digestive health insights!', card:null, time:'09:00' }
-  ]);
-  const [input, setInput] = useState('');
-  const [typing, setTyping] = useState(false);
-  const [logCount, setLogCount] = useState(0);
-  const [logs, setLogs] = useState([]);
-  const [seedD] = useState(seedData);
-  const messagesEndRef = useRef(null);
-  const textareaRef = useRef(null);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior:'smooth' });
-  }, [messages, typing]);
-
-  const now = () => new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});
-  const today = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-
-  const sendMessage = useCallback(() => {
-    const text = input.trim();
-    if (!text) return;
-    const userMsg = { id:Date.now(), role:'user', text, card:null, time:now() };
-    setMessages(m => [...m, userMsg]);
-    setInput('');
-    setTyping(true);
-    setTimeout(() => {
-      const resp = generateResponse(text);
-      const aiMsg = { id:Date.now()+1, role:'ai', text:resp.text, card:resp.card, time:now() };
-      setMessages(m => [...m, aiMsg]);
-      setTyping(false);
-      if (resp.card) {
-        setLogCount(c => c+1);
-        setLogs(l => [{ ...resp.card, timestamp: now(), raw: text }, ...l]);
-      }
-    }, 1200 + Math.random()*600);
-  }, [input]);
-
-  const handleKey = (e) => {
-    if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-  };
-
-  const renderMarkdown = (text) => {
-    return text
-      .replace(/\*\*(.+?)\*\*/g, '<strong style="color:#d4e8d4">$1</strong>')
-      .replace(/\n/g, '<br/>');
-  };
-
-  const stats = seedD.todayStats;
-
-  return (
-    <div className="app">
-      {/* Header */}
-      <header className="header">
-        <div className="logo">
-          <div className="logo-icon">🫁</div>
-          Digesi<span>Go</span>
+        <div class="hero-stats">
+          <div class="hero-stat"><div class="hs-val">4.9★</div><div class="hs-label">App Store rating</div></div>
+          <div class="hero-stat"><div class="hs-val">12K+</div><div class="hs-label">Active users</div></div>
+          <div class="hero-stat"><div class="hs-val">98%</div><div class="hs-label">Logging accuracy</div></div>
         </div>
-        <div className="header-right">
-          <div className="status-pill"><div className="status-dot"/><span>AI Active</span></div>
-          <span className="date-badge">{today}</span>
+      </div>
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <iframe src="app.html" scrolling="no" title="DigestiGo App Preview"></iframe>
+          </div>
+          <div class="phone-sheen"></div>
         </div>
-      </header>
-
-      {/* Nav */}
-      <nav className="nav">
-        {[
-          { id:'chat', icon:'💬', label:'Chat Tracker', badge: logCount > 0 ? logCount : null },
-          { id:'dashboard', icon:'📊', label:'Dashboard' },
-          { id:'history', icon:'📋', label:'Log History', badge: logs.length > 0 ? logs.length : null },
-        ].map(t => (
-          <button key={t.id} className={`nav-btn ${tab===t.id?'active':''}`} onClick={()=>setTab(t.id)}>
-            {t.icon} {t.label}
-            {t.badge && <span className="badge">{t.badge}</span>}
-          </button>
-        ))}
-      </nav>
-
-      {/* Main */}
-      <main className="main">
-
-        {/* ── CHAT TAB ── */}
-        {tab==='chat' && (
-          <div className="chat-page">
-            {/* Sidebar */}
-            <aside className="chat-sidebar">
-              <div className="sidebar-section">
-                <div className="sidebar-title">Today's Stats</div>
-                {[
-                  { icon:'🍽️', label:'Calories', val:`${stats.calories} kcal` },
-                  { icon:'🌾', label:'Fiber', val:`${stats.fiber}g` },
-                  { icon:'👟', label:'Steps', val:stats.steps.toLocaleString() },
-                  { icon:'⚡', label:'Energy', val:`${stats.energy}/10` },
-                  { icon:'💧', label:'Water', val:`${stats.water} glasses` },
-                ].map(s => (
-                  <div key={s.label} className="quick-stat">
-                    <div className="qs-left"><span className="qs-icon">{s.icon}</span><span className="qs-label">{s.label}</span></div>
-                    <span className="qs-val">{s.val}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="sidebar-section">
-                <div className="sidebar-title">Quick Log</div>
-                <div className="prompt-chip-list">
-                  {SIDEBAR_PROMPTS.map(p => (
-                    <button key={p} className="prompt-chip" onClick={()=>setInput(p.slice(2).trim())}>{p}</button>
-                  ))}
-                </div>
-              </div>
-              <div className="sidebar-tips">
-                <div className="sidebar-title">Gut Insights</div>
-                {[
-                  { icon:'🌿', text:'Aim for 25–38g of fiber daily for optimal gut health.' },
-                  { icon:'💧', text:'8+ glasses of water supports bowel regularity.' },
-                  { icon:'🚶', text:'Even a 10-min walk after meals reduces bloating.' },
-                  { icon:'🧘', text:'Stress directly impacts your gut microbiome.' },
-                ].map((tip,i) => (
-                  <div key={i} className="tip-item"><span className="icon">{tip.icon}</span><span>{tip.text}</span></div>
-                ))}
-              </div>
-            </aside>
-
-            {/* Chat main */}
-            <div className="chat-main">
-              <div className="chat-messages">
-                {messages.map(msg => (
-                  <div key={msg.id} className={`msg ${msg.role}`}>
-                    <div className={`avatar ${msg.role}`}>{msg.role==='ai'?'🤖':'👤'}</div>
-                    <div>
-                      <div className="bubble">
-                        <span dangerouslySetInnerHTML={{__html: renderMarkdown(msg.text)}}/>
-                        {msg.card && (
-                          <div className="log-card">
-                            <div className="log-card-title">{msg.card.title} — Logged</div>
-                            {Object.entries(msg.card.data).map(([k,v]) => (
-                              <div key={k} className="log-card-row"><span>{k}</span><span className="log-card-val">{v}</span></div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                      <div className="bubble-meta">{msg.time}</div>
-                    </div>
-                  </div>
-                ))}
-                {typing && (
-                  <div className="msg ai">
-                    <div className="avatar ai">🤖</div>
-                    <div className="bubble"><div className="typing"><span/><span/><span/></div></div>
-                  </div>
-                )}
-                <div ref={messagesEndRef}/>
-              </div>
-              <div className="chat-input-wrap">
-                <div className="chat-input-row">
-                  <textarea
-                    ref={textareaRef}
-                    className="chat-textarea"
-                    value={input}
-                    onChange={e=>setInput(e.target.value)}
-                    onKeyDown={handleKey}
-                    placeholder="Tell me what you ate, how you feel, or any symptoms… (Enter to send)"
-                    rows={1}
-                  />
-                  <button className="send-btn" onClick={sendMessage} disabled={!input.trim()||typing}>➤</button>
-                </div>
-                <div className="input-hints">
-                  {HINTS.map(h=>(
-                    <button key={h} className="hint-chip" onClick={()=>setInput(h)}>{h}</button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ── DASHBOARD TAB ── */}
-        {tab==='dashboard' && (
-          <div className="dashboard">
-            {/* Stat cards */}
-            <div className="dash-grid">
-              {[
-                { label:'Calories Today', val:'1,750', sub:'of 2,000 goal', icon:'🍽️' },
-                { label:'Fiber Intake', val:'19g', sub:'of 30g recommended', icon:'🌾' },
-                { label:'Steps Today', val:'5,800', sub:'+12% vs avg', icon:'👟' },
-                { label:'Energy Score', val:'5/10', sub:'Moderate — see insights', icon:'⚡' },
-              ].map(c => (
-                <div key={c.label} className="stat-card">
-                  <div className="sc-icon">{c.icon}</div>
-                  <div className="sc-label">{c.label}</div>
-                  <div className="sc-val">{c.val}</div>
-                  <div className="sc-sub">{c.sub}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Charts row */}
-            <div className="dash-row">
-              <div className="panel">
-                <div className="panel-title"><div className="dot"/>Weekly Calorie Intake</div>
-                <BarChart data={seedD.calorieWeek}/>
-              </div>
-              <div className="panel">
-                <div className="panel-title"><div className="dot" style={{background:'#69f0ae'}}/>Daily Fiber (g)</div>
-                <BarChart data={seedD.fiberWeek} color="#69f0ae"/>
-              </div>
-            </div>
-
-            <div className="dash-row">
-              <div className="panel">
-                <div className="panel-title"><div className="dot" style={{background:'#40c4ff'}}/>Step Count — 7 Days</div>
-                <LineChart data={seedD.stepsWeek} color="#40c4ff"/>
-              </div>
-              <div className="panel">
-                <div className="panel-title"><div className="dot" style={{background:'#ce93d8'}}/>Energy Level — 7 Days</div>
-                <LineChart data={seedD.energyWeek} color="#ce93d8"/>
-              </div>
-            </div>
-
-            <div className="dash-row three">
-              {/* Symptom gauges */}
-              <div className="panel">
-                <div className="panel-title"><div className="dot" style={{background:'#ffab40'}}/>Symptom Severity (week avg)</div>
-                <div className="gauge-list">
-                  {seedD.symptoms.map(s=><GaugeBar key={s.label} {...s}/>)}
-                </div>
-              </div>
-
-              {/* Energy ring */}
-              <div className="panel">
-                <div className="panel-title"><div className="dot" style={{background:'#ce93d8'}}/>Energy Today</div>
-                <div className="energy-ring">
-                  <EnergyRing score={stats.energy}/>
-                  <div className="ring-info">
-                    {[
-                      { color:'#00e676', label:'Morning', val:'6/10' },
-                      { color:'#69f0ae', label:'Afternoon', val:'5/10' },
-                      { color:'#ce93d8', label:'Evening', val:'4/10' },
-                    ].map(r=>(
-                      <div key={r.label} className="ring-stat">
-                        <div className="ring-dot" style={{background:r.color}}/>
-                        <span style={{color:'var(--text-dim)',fontSize:11}}>{r.label}</span>
-                        <span style={{color:'var(--text)',fontSize:12,fontFamily:'var(--mono)',marginLeft:'auto'}}>{r.val}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Insights */}
-              <div className="panel">
-                <div className="panel-title"><div className="dot"/>Gut Health Insights</div>
-                <div className="insight-list">
-                  <div className="insight-card warn"><strong>⚠️ Low Fiber Day</strong>Only 19g today — aim for 30g. Add legumes or whole grains.</div>
-                  <div className="insight-card"><strong>✅ Good Hydration</strong>6 glasses logged. Stay consistent through the evening.</div>
-                  <div className="insight-card"><strong>🚶 Activity Boosts Gut</strong>Your bloating score drops on high-step days.</div>
-                  <div className="insight-card danger"><strong>😣 Bloating Pattern</strong>Bloating noted 3 of last 7 days — possibly FODMAP-related.</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Recent logs table */}
-            <div className="panel" style={{marginBottom:20}}>
-              <div className="panel-title"><div className="dot"/>Recent Log Entries</div>
-              {logs.length === 0 ? (
-                <p style={{color:'var(--text-muted)',fontSize:12,textAlign:'center',padding:'20px 0'}}>
-                  No entries yet — start chatting to log data!
-                </p>
-              ) : (
-                <table className="log-table">
-                  <thead><tr><th>Time</th><th>Type</th><th>Details</th></tr></thead>
-                  <tbody>
-                    {logs.map((l,i)=>(
-                      <tr key={i}>
-                        <td style={{color:'var(--text-muted)',fontFamily:'var(--mono)'}}>{l.timestamp}</td>
-                        <td><span className={`tag ${l.type}`}>{l.type}</span></td>
-                        <td>{Object.values(l.data).slice(0,2).join(' · ')}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* ── HISTORY TAB ── */}
-        {tab==='history' && (
-          <div className="history-page">
-            {logs.length === 0 ? (
-              <div className="empty-state">
-                <div className="es-icon">📋</div>
-                <p>No log entries yet</p>
-                <small>Go to the Chat tab and start telling DigestiBot about your meals, symptoms, and activity.</small>
-              </div>
-            ) : (
-              <div className="timeline">
-                <div className="timeline-day">
-                  <div className="timeline-date">{today}</div>
-                  <div className="timeline-entries">
-                    {logs.map((l,i)=>{
-                      const icons = {food:'🥦',activity:'🏃',symptom:'⚠️',energy:'⚡'};
-                      const details = Object.entries(l.data).map(([k,v])=>`${k}: ${v}`).join(' · ');
-                      return (
-                        <div key={i} className="tl-entry">
-                          <span className="tl-time">{l.timestamp}</span>
-                          <span className="tl-icon">{icons[l.type]||'📝'}</span>
-                          <div className="tl-body">
-                            <div className="tl-title">{l.title}</div>
-                            <div className="tl-detail">{details}</div>
-                            <div style={{marginTop:4}}><span className={`tag ${l.type}`}>{l.type}</span></div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Sample historical days */}
-                {[
-                  { date:'Yesterday, Feb 13', entries:[
-                    { time:'08:15', icon:'🥦', title:'🥦 Food Log — Logged', detail:'Item(s): oatmeal, berries · Est. Calories: 380 kcal', type:'food' },
-                    { time:'12:00', icon:'🏃', title:'🏃 Activity Log — Logged', detail:'Activity: yoga · Duration: 30 min', type:'activity' },
-                    { time:'19:30', icon:'⚠️', title:'⚠️ Symptom Log — Logged', detail:'Symptom: bloating · Severity: Mild (1/3)', type:'symptom' },
-                    { time:'21:00', icon:'⚡', title:'⚡ Energy Log — Logged', detail:'Level: Moderate · Score: 6/10', type:'energy' },
-                  ]},
-                  { date:'Feb 12', entries:[
-                    { time:'07:30', icon:'🥦', title:'🥦 Food Log — Logged', detail:'Item(s): eggs, toast · Est. Calories: 420 kcal', type:'food' },
-                    { time:'17:00', icon:'🏃', title:'🏃 Activity Log — Logged', detail:'Activity: run · Duration: 45 min · Steps: 5200', type:'activity' },
-                    { time:'20:00', icon:'⚡', title:'⚡ Energy Log — Logged', detail:'Level: High · Score: 8/10', type:'energy' },
-                  ]},
-                ].map(day=>(
-                  <div key={day.date} className="timeline-day">
-                    <div className="timeline-date">{day.date}</div>
-                    <div className="timeline-entries">
-                      {day.entries.map((e,i)=>(
-                        <div key={i} className="tl-entry">
-                          <span className="tl-time">{e.time}</span>
-                          <span className="tl-icon">{e.icon}</span>
-                          <div className="tl-body">
-                            <div className="tl-title">{e.title}</div>
-                            <div className="tl-detail">{e.detail}</div>
-                            <div style={{marginTop:4}}><span className={`tag ${e.type}`}>{e.type}</span></div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-      </main>
+        <div class="phone-float pf1">
+          <span class="pf-icon">🌾</span>
+          <div class="pf-val">28g</div>
+          <div class="pf-label">Fiber today</div>
+        </div>
+        <div class="phone-float pf2">
+          <span class="pf-icon">⚡</span>
+          <div class="pf-val">8/10</div>
+          <div class="pf-label">Energy score</div>
+        </div>
+        <div class="phone-float pf3">
+          <span class="pf-icon">✅</span>
+          <div class="pf-val">No bloating</div>
+          <div class="pf-label">Today</div>
+        </div>
+      </div>
     </div>
-  );
-}
+  </div>
+</section>
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
-</script>
+<!-- ── FEATURES ─────────────────────────────────────────────────── -->
+<section class="landing-section surface" id="features">
+  <div class="container">
+    <div class="section-head-center fade-in">
+      <div class="section-label">Features</div>
+      <h2 class="section-heading">Everything your gut needs,<br/>nothing you don't.</h2>
+      <p class="section-sub">Built for people with digestive conditions, health goals, or anyone curious about how food and lifestyle affect their gut.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card fade-in">
+        <div class="feat-icon">💬</div>
+        <h3>Natural AI Conversation</h3>
+        <p>Just talk. Say "I had oatmeal and eggs for breakfast" and DigestiGo logs calories, fiber, macros — automatically. No forms, no dropdowns.</p>
+        <span class="feat-tag">Core</span>
+      </div>
+      <div class="feat-card fade-in fade-delay-1">
+        <div class="feat-icon">🫁</div>
+        <h3>Gut-Focused Tracking</h3>
+        <p>Designed specifically for the digestive system. Track bloating, gas, cramping, bowel movements, and reflux with clinical precision.</p>
+        <span class="feat-tag">Specialist</span>
+      </div>
+      <div class="feat-card fade-in fade-delay-2">
+        <div class="feat-icon">📊</div>
+        <h3>Smart Dashboards</h3>
+        <p>Visual weekly charts for calories, fiber, steps, and energy. Spot correlations between what you ate and how you felt — instantly.</p>
+        <span class="feat-tag">Analytics</span>
+      </div>
+      <div class="feat-card fade-in">
+        <div class="feat-icon">🏃</div>
+        <h3>Activity &amp; Motility</h3>
+        <p>Log workouts, walks, and steps. DigestiGo connects physical activity data to gut motility scores and symptom reduction.</p>
+        <span class="feat-tag">Activity</span>
+      </div>
+      <div class="feat-card fade-in fade-delay-1">
+        <div class="feat-icon">⚡</div>
+        <h3>Energy Tracking</h3>
+        <p>Rate your energy throughout the day. Correlates with meal timing, fiber intake, and digestive comfort to uncover hidden patterns.</p>
+        <span class="feat-tag">Wellness</span>
+      </div>
+      <div class="feat-card fade-in fade-delay-2">
+        <div class="feat-icon">🔍</div>
+        <h3>AI Insights Engine</h3>
+        <p>DigestiGo's AI surfaces personalized insights — like "Your bloating peaks 2 hours after high-FODMAP meals" — so you can act.</p>
+        <span class="feat-tag">AI</span>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:36px">
+      <a href="features.html" class="btn-secondary" style="display:inline-flex">
+        Explore All Features →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ─────────────────────────────────────────────── -->
+<section class="landing-section" id="how">
+  <div class="container">
+    <div class="how-inner">
+      <div class="fade-in">
+        <div class="section-label">How It Works</div>
+        <h2 class="section-heading">Three steps to gut clarity.</h2>
+        <p class="section-sub" style="margin-bottom:32px">DigestiGo turns your natural language into structured health data — no manual entry ever.</p>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">01</div>
+            <div class="step-content">
+              <h3>Talk Naturally</h3>
+              <p>Tell DigestiGo what you ate, how you feel, or what activity you did — exactly as you'd describe it to a friend. No special format required.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">02</div>
+            <div class="step-content">
+              <h3>AI Logs &amp; Analyses</h3>
+              <p>Our AI parses your message, extracts nutritional data, identifies symptoms, and stores structured entries — all in under a second.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">03</div>
+            <div class="step-content">
+              <h3>Understand Your Patterns</h3>
+              <p>Review your personalized dashboard, symptom trends, and AI-generated insights to understand exactly what affects your gut health.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-preview fade-in">
+        <div class="chat-preview-header">
+          <div class="cp-avatar">🤖</div>
+          <div>
+            <div class="cp-name">DigestiBot</div>
+            <div class="cp-status"><span class="cp-dot"></span>Online — tracking your gut</div>
+          </div>
+        </div>
+        <div class="cp-msg user"><div class="cp-bubble">I had grilled salmon, broccoli, and brown rice for lunch</div></div>
+        <div class="cp-msg ai">
+          <div class="cp-bubble">
+            Logged! That's a high-fiber, anti-inflammatory meal. Salmon's omega-3s actively reduce gut inflammation.
+            <div class="cp-mini-card">
+              <div class="cp-mini-title">🐟 Food Log — Logged</div>
+              <div class="cp-mini-row"><span>Est. Calories</span><span class="cp-mini-val">520 kcal</span></div>
+              <div class="cp-mini-row"><span>Fiber</span><span class="cp-mini-val">8g</span></div>
+              <div class="cp-mini-row"><span>Gut Score</span><span class="cp-mini-val">High ↑</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="cp-msg user"><div class="cp-bubble">Feeling some mild bloating an hour later</div></div>
+        <div class="cp-msg ai">
+          <div class="cp-bubble">
+            Noted. Could be the broccoli — a high-FODMAP vegetable for some. Try steaming it shorter next time. I'll track this correlation.
+            <div class="cp-mini-card">
+              <div class="cp-mini-title">⚠️ Symptom Log — Logged</div>
+              <div class="cp-mini-row"><span>Symptom</span><span class="cp-mini-val">Bloating</span></div>
+              <div class="cp-mini-row"><span>Severity</span><span class="cp-mini-val">Mild (1/3)</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRACKING CATEGORIES ──────────────────────────────────────── -->
+<section class="landing-section surface">
+  <div class="container">
+    <div class="section-head-center fade-in">
+      <div class="section-label">What We Track</div>
+      <h2 class="section-heading">Four pillars of gut health.</h2>
+      <p class="section-sub">DigestiGo monitors the four interconnected systems that determine your digestive wellbeing.</p>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card fade-in">
+        <span class="cat-emoji">🥦</span>
+        <h3>Diet &amp; Nutrition</h3>
+        <p>Track every meal with AI precision — calories, fiber, macros, and gut-specific nutrients.</p>
+        <div class="cat-items">
+          <span class="cat-pill">Calories</span><span class="cat-pill">Fiber</span>
+          <span class="cat-pill">FODMAP</span><span class="cat-pill">Hydration</span>
+        </div>
+      </div>
+      <div class="cat-card fade-in fade-delay-1">
+        <span class="cat-emoji">🏃</span>
+        <h3>Physical Activity</h3>
+        <p>Exercise directly impacts gut motility. Log workouts and see the digestive benefits.</p>
+        <div class="cat-items">
+          <span class="cat-pill">Steps</span><span class="cat-pill">Workouts</span>
+          <span class="cat-pill">Motility</span><span class="cat-pill">Duration</span>
+        </div>
+      </div>
+      <div class="cat-card fade-in fade-delay-2">
+        <span class="cat-emoji">😣</span>
+        <h3>Digestive Symptoms</h3>
+        <p>Clinical-grade symptom tracking for bloating, gas, cramping, reflux, and bowel changes.</p>
+        <div class="cat-items">
+          <span class="cat-pill">Bloating</span><span class="cat-pill">Gas</span>
+          <span class="cat-pill">Cramping</span><span class="cat-pill">Reflux</span>
+        </div>
+      </div>
+      <div class="cat-card fade-in fade-delay-3">
+        <span class="cat-emoji">⚡</span>
+        <h3>Energy &amp; Mood</h3>
+        <p>Gut health and energy are deeply linked. Track how nutrition impacts how you feel.</p>
+        <div class="cat-items">
+          <span class="cat-pill">Energy</span><span class="cat-pill">Mood</span>
+          <span class="cat-pill">Focus</span><span class="cat-pill">Sleep</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── LIVE DEMO ─────────────────────────────────────────────────── -->
+<section class="landing-section" id="demo">
+  <div class="container">
+    <div class="section-head-center fade-in">
+      <div class="section-label">Live Demo</div>
+      <h2 class="section-heading">Try it yourself — right here.</h2>
+      <p class="section-sub">This is a real preview of the DigestiGo interface. Type a message in the chat and see the AI track it instantly.</p>
+    </div>
+    <div class="demo-stage">
+      <div class="demo-phone-large">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <iframe src="app.html" title="DigestiGo Live Demo"></iframe>
+        </div>
+        <div class="phone-sheen"></div>
+      </div>
+      <div class="demo-info fade-in">
+        <div class="section-label">How to try</div>
+        <h2 class="section-heading" style="font-size:28px">Interact with<br/>DigestiBot now.</h2>
+        <p style="color:var(--text-dim);font-size:14px;margin-top:12px;line-height:1.65">The demo above is fully interactive. Try these example messages in the chat:</p>
+        <div class="demo-steps">
+          <div class="demo-step">
+            <div class="ds-num">1</div>
+            <div class="ds-text"><strong>Log a meal:</strong> "I had avocado toast and a smoothie for breakfast"</div>
+          </div>
+          <div class="demo-step">
+            <div class="ds-num">2</div>
+            <div class="ds-text"><strong>Log activity:</strong> "I went for a 30-minute jog this morning"</div>
+          </div>
+          <div class="demo-step">
+            <div class="ds-num">3</div>
+            <div class="ds-text"><strong>Log a symptom:</strong> "Experiencing moderate bloating after lunch"</div>
+          </div>
+          <div class="demo-step">
+            <div class="ds-num">4</div>
+            <div class="ds-text"><strong>Check the Dashboard tab</strong> to see your entries visualised</div>
+          </div>
+        </div>
+        <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap">
+          <a href="#cta" class="btn-primary">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            Get the Full iOS App
+          </a>
+          <a href="app.html" class="btn-secondary" target="_blank">Open Full App ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ─────────────────────────────────────────────── -->
+<section class="landing-section surface" id="testimonials">
+  <div class="container">
+    <div class="section-head-center fade-in">
+      <div class="section-label">Reviews</div>
+      <h2 class="section-heading">Loved by people with gut issues.</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card fade-in">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"Finally an app that doesn't feel like a chore. I just tell it what I ate and it handles everything. My IBS symptoms have improved dramatically since I started tracking patterns."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👩</div>
+          <div><div class="testi-name">Sarah K.</div><div class="testi-role">IBS patient, using DigestiGo 8 months</div></div>
+        </div>
+      </div>
+      <div class="testi-card fade-in fade-delay-1">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"As a gastroenterologist, I recommend this to patients. The symptom tracking is clinically relevant and the AI insights help them come prepared to appointments."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👨‍⚕️</div>
+          <div><div class="testi-name">Dr. Marcus T.</div><div class="testi-role">Gastroenterologist, Toronto</div></div>
+        </div>
+      </div>
+      <div class="testi-card fade-in fade-delay-2">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"The conversation-based logging is a game changer. I used to forget to log halfway through the day. Now I just text DigestiBot like I'm chatting with a friend."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">🧑</div>
+          <div><div class="testi-name">James R.</div><div class="testi-role">Crohn's disease, 1 year with DigestiGo</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ──────────────────────────────────────────────────────── -->
+<section class="cta-section" id="cta">
+  <div class="container">
+    <div class="section-label" style="justify-content:center">Get Started</div>
+    <h2>Your gut has a story.<br/><em>Start listening.</em></h2>
+    <p>Download DigestiGo today and start understanding the patterns behind your digestive health — through conversation.</p>
+    <div class="cta-btns">
+      <a href="#" class="appstore-btn">
+        <span class="as-icon">🍎</span>
+        <div class="as-text">
+          <div class="as-sub">Download on the</div>
+          <div class="as-main">App Store</div>
+        </div>
+      </a>
+      <a href="#demo" class="btn-secondary" style="padding:14px 28px">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16"/></svg>
+        Try the Demo
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ───────────────────────────────────────────────────── -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="fb-logo"><div class="fb-icon">🫁</div> Digesti<span>Go</span></div>
+        <p>AI-powered gut health tracking through natural conversation. Know your gut.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="features.html">Features</a>
+        <a href="#demo">Live Demo</a>
+        <a href="#how">How It Works</a>
+        <a href="#cta">Download</a>
+      </div>
+      <div class="footer-col">
+        <h4>Track</h4>
+        <a href="features.html#diet">Diet &amp; Nutrition</a>
+        <a href="features.html#symptoms">Gut Symptoms</a>
+        <a href="features.html#activity">Activity</a>
+        <a href="features.html#energy">Energy</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 DigestiGo. All rights reserved.</span>
+      <span>Made with 💚 for gut health</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/nav.js"></script>
 </body>
 </html>

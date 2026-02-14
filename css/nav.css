@@ -1,0 +1,101 @@
+/* ── Shared Navigation ─────────────────────────────────────────── */
+nav.site-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(7, 11, 7, .85);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  height: 64px;
+}
+
+.nav-inner {
+  max-width: 1100px; margin: 0 auto; padding: 0 28px;
+  height: 100%; display: flex; align-items: center; justify-content: space-between;
+}
+
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 20px; font-weight: 800; letter-spacing: -.5px;
+  text-decoration: none; color: var(--white);
+}
+.nav-logo-icon {
+  width: 36px; height: 36px; background: var(--green); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+}
+.nav-logo span { color: var(--green); }
+
+.nav-links {
+  display: flex; align-items: center; gap: 28px;
+}
+.nav-links a {
+  color: var(--text-dim); text-decoration: none; font-size: 14px;
+  transition: color .2s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--green); }
+
+.nav-cta {
+  padding: 9px 22px;
+  background: var(--green); color: #000;
+  border-radius: 10px; font-size: 14px; font-weight: 700;
+  text-decoration: none; transition: all .2s;
+  display: flex; align-items: center; gap: 7px;
+}
+.nav-cta:hover {
+  background: #00ff88;
+  box-shadow: 0 0 20px var(--green-glow);
+}
+
+/* ── Shared Section Labels & Headings ─────────────────────────── */
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 2px; color: var(--green); margin-bottom: 14px;
+}
+.section-label::before {
+  content: ''; width: 20px; height: 1px; background: var(--green);
+}
+
+h2.section-heading {
+  font-size: clamp(28px, 4vw, 42px); font-weight: 800;
+  color: var(--white); letter-spacing: -.8px; line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.section-sub {
+  font-size: 16px; color: var(--text-dim);
+  max-width: 540px; line-height: 1.65;
+}
+
+/* ── Shared Buttons ────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 28px; border-radius: 14px;
+  background: var(--green); color: #000;
+  font-size: 15px; font-weight: 700; text-decoration: none;
+  transition: all .2s; border: none; cursor: pointer;
+  font-family: var(--font);
+}
+.btn-primary:hover {
+  background: #00ff88;
+  box-shadow: 0 0 28px rgba(0, 230, 118, .3);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 14px 28px; border-radius: 14px;
+  background: transparent; color: var(--text);
+  border: 1px solid var(--border2);
+  font-size: 15px; font-weight: 600; text-decoration: none;
+  transition: all .2s; cursor: pointer; font-family: var(--font);
+}
+.btn-secondary:hover {
+  border-color: var(--green-mid);
+  color: var(--green);
+  background: var(--green-glow2);
+}
+
+/* ── Responsive Nav ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+}

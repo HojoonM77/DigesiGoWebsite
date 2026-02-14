@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DigestiGo — Track While Conversing</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/variables.css"/>
+  <link rel="stylesheet" href="css/app.css"/>
+
+  <!-- React 18 + Babel (CDN, no build step) -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- App data & logic (plain JS, loaded before Babel JSX) -->
+  <script src="js/seed-data.js"></script>
+  <script src="js/ai-engine.js"></script>
+
+  <!-- React app (JSX transpiled by Babel standalone) -->
+  <script type="text/babel" src="js/app.js"></script>
+</body>
+</html>

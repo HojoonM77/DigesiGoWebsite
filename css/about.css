@@ -1,0 +1,155 @@
+/* ── About / Mission Page Styles ───────────────────────────────── */
+
+.page-hero {
+  padding: 130px 0 80px;
+  position: relative; overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.page-hero::before {
+  content: '';
+  position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+  width: 700px; height: 500px;
+  background: radial-gradient(ellipse, rgba(0,230,118,.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+.page-hero-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at 50% 0%, black 20%, transparent 70%);
+  opacity: .25;
+}
+.page-hero-inner { text-align: center; position: relative; }
+.page-hero h1 {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 900; letter-spacing: -1.5px; line-height: 1.08;
+  color: var(--white); margin-bottom: 18px;
+}
+.page-hero h1 em { color: var(--green); font-style: normal; }
+.page-hero p {
+  font-size: 17px; color: var(--text-dim);
+  max-width: 520px; margin: 0 auto; line-height: 1.65;
+}
+
+/* ── MISSION STATEMENT ──────────────────────────────────────────── */
+.mission-section { padding: 90px 0; }
+.mission-inner {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+}
+.mission-quote {
+  font-size: clamp(18px, 2.5vw, 26px); font-weight: 700;
+  color: var(--white); line-height: 1.4; letter-spacing: -.3px;
+  border-left: 3px solid var(--green); padding-left: 24px; margin-bottom: 24px;
+}
+.mission-body { font-size: 14px; color: var(--text-dim); line-height: 1.75; }
+.mission-body p { margin-bottom: 16px; }
+.mission-body p:last-child { margin-bottom: 0; }
+
+.mission-stats { display: flex; flex-direction: column; gap: 20px; }
+.mission-stat-card {
+  padding: 22px 24px; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.mission-stat-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--green);
+}
+.ms-val   { font-size: 34px; font-weight: 800; color: var(--green); font-family: var(--mono); line-height: 1; }
+.ms-label { font-size: 13px; color: var(--text-dim); margin-top: 6px; }
+
+/* ── ORIGIN STORY ────────────────────────────────────────────────── */
+.story-section {
+  padding: 80px 0; background: var(--surface);
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.story-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+.story-visual {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 30px; position: relative;
+}
+.story-visual-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+  padding-bottom: 14px; border-bottom: 1px solid var(--border);
+  font-size: 13px; color: var(--text-dim);
+}
+.story-icon { font-size: 28px; }
+.story-timeline { display: flex; flex-direction: column; gap: 0; }
+.story-tl-item {
+  display: flex; gap: 16px; padding: 14px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.story-tl-item:last-child { border-bottom: none; }
+.stl-year {
+  font-size: 12px; font-weight: 700; color: var(--green); font-family: var(--mono);
+  min-width: 44px; padding-top: 1px;
+}
+.stl-content h4 { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 3px; }
+.stl-content p  { font-size: 11px; color: var(--text-dim); line-height: 1.5; }
+
+/* ── CORE VALUES ─────────────────────────────────────────────────── */
+.values-section { padding: 90px 0; }
+.values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
+.value-card {
+  padding: 28px 24px; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--border);
+  transition: all .2s;
+}
+.value-card:hover { transform: translateY(-4px); border-color: var(--border2); box-shadow: 0 20px 40px rgba(0,0,0,.3); }
+.value-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: var(--green-dark); border: 1px solid rgba(0,230,118,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; margin-bottom: 20px;
+}
+.value-card h3 { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+.value-card p  { font-size: 13px; color: var(--text-dim); line-height: 1.65; }
+
+/* ── TEAM SECTION ────────────────────────────────────────────────── */
+.team-section {
+  padding: 80px 0; background: var(--surface);
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 48px; }
+.team-card {
+  padding: 24px 20px; border-radius: var(--radius);
+  background: var(--surface2); border: 1px solid var(--border);
+  text-align: center; transition: all .2s;
+}
+.team-card:hover { transform: translateY(-3px); border-color: var(--border2); }
+.team-avatar {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--green-dark); border: 2px solid rgba(0,230,118,.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; margin: 0 auto 14px;
+}
+.team-name { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.team-role { font-size: 11px; color: var(--green); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+.team-bio  { font-size: 11px; color: var(--text-dim); line-height: 1.55; }
+
+/* ── SCIENCE SECTION ─────────────────────────────────────────────── */
+.science-section { padding: 90px 0; }
+.science-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: start; }
+.science-refs { display: flex; flex-direction: column; gap: 14px; }
+.science-ref {
+  padding: 14px 16px; border-radius: 10px;
+  background: var(--surface); border: 1px solid var(--border);
+  font-size: 12px; color: var(--text-dim); line-height: 1.55;
+}
+.science-ref .ref-title { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.science-ref .ref-source { font-size: 10px; color: var(--green); font-family: var(--mono); margin-top: 4px; }
+
+/* ── RESPONSIVE ──────────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .mission-inner  { grid-template-columns: 1fr; gap: 40px; }
+  .story-inner    { grid-template-columns: 1fr; }
+  .values-grid    { grid-template-columns: 1fr 1fr; }
+  .team-grid      { grid-template-columns: 1fr 1fr; }
+  .science-inner  { grid-template-columns: 1fr; gap: 40px; }
+}
+@media (max-width: 480px) {
+  .values-grid { grid-template-columns: 1fr; }
+  .team-grid   { grid-template-columns: 1fr 1fr; }
+}
