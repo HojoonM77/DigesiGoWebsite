@@ -63,18 +63,19 @@ body {
 .green  { color: var(--green); }
 .mono   { font-family: var(--mono); }
 
-/* Scroll fade-in */
+/* Scroll fade-in — spring easing */
 .fade-in {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity .6s ease, transform .6s ease;
+  transform: translateY(28px) scale(.98);
+  transition: opacity .55s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1);
+  will-change: transform, opacity;
 }
-.fade-in.visible { opacity: 1; transform: translateY(0); }
+.fade-in.visible { opacity: 1; transform: translateY(0) scale(1); }
 
 /* Staggered delay helpers */
-.fade-delay-1 { transition-delay: .1s; }
-.fade-delay-2 { transition-delay: .2s; }
-.fade-delay-3 { transition-delay: .3s; }
+.fade-delay-1 { transition-delay: .08s; }
+.fade-delay-2 { transition-delay: .16s; }
+.fade-delay-3 { transition-delay: .24s; }
 
 /* ── Shared Animations ─────────────────────────────────────────── */
 @keyframes pulse {
@@ -86,3 +87,16 @@ body {
   0%, 100% { transform: translateY(0); }
   50%       { transform: translateY(-8px); }
 }
+
+/* Glow sweep on hover for cards */
+@keyframes glowSweep {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Nav logo entrance */
+@keyframes logoEntrance {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.nav-logo { animation: logoEntrance .4s cubic-bezier(.22,1,.36,1) both; }

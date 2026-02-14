@@ -150,7 +150,9 @@ function App() {
       {/* App Header */}
       <header className="app-header">
         <div className="app-logo">
-          <div className="app-logo-icon">🫁</div>
+          <div className="app-logo-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17 8.5c-.4-1.3-1.4-2.3-2.7-2.7-.7-.2-1.4-.1-2 .2-.3.2-.7.2-1 0-.6-.4-1.3-.5-2-.4C7.9 5.9 6.5 7 6 8.4c-.3.9-.2 1.9.2 2.7.5 1 .6 2.2.2 3.3-.4 1-.6 2.2-.2 3.3.5 1.5 1.9 2.6 3.5 2.9 1 .2 2 .2 3 0 1-.2 1.9-.7 2.6-1.5.6-.7.9-1.6.9-2.5 0-.7-.2-1.4-.2-2.1 0-.5.1-1 .3-1.5.6-1.1.9-2.4.7-3.7z"/></svg>
+          </div>
           Digesti<span>Go</span>
         </div>
         <div className="header-right">

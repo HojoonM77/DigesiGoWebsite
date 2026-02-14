@@ -131,15 +131,25 @@
 .feat-card {
   padding: 28px; border-radius: var(--radius);
   background: var(--surface2); border: 1px solid var(--border);
-  transition: all .25s; position: relative; overflow: hidden;
+  transition: border-color .25s, box-shadow .25s; position: relative; overflow: hidden;
+  cursor: default;
 }
 .feat-card::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
   background: linear-gradient(90deg, transparent, var(--green), transparent);
   opacity: 0; transition: opacity .3s;
 }
-.feat-card:hover { border-color: var(--border2); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,.4); }
+/* Top-edge shimmer on hover */
+.feat-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(0,230,118,.04) 50%, transparent 70%);
+  background-size: 200% 100%;
+  opacity: 0; transition: opacity .3s;
+}
+.feat-card:hover { border-color: var(--border2); box-shadow: 0 20px 40px rgba(0,0,0,.4); }
 .feat-card:hover::before { opacity: 1; }
+.feat-card:hover::after  { opacity: 1; animation: glowSweep 1.2s linear infinite; }
 .feat-icon {
   width: 48px; height: 48px; border-radius: 12px;
   background: var(--green-dark); border: 1px solid rgba(0,230,118,.2);
