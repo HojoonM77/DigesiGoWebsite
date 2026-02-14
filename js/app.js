@@ -118,22 +118,20 @@ function App() {
   const now = () => new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
   const today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
-  const sendMessage = useCallback(() => {
+  const sendMessage = useCallback(async () => {
     const text = input.trim();
     if (!text) return;
     setMessages(m => [...m, { id: Date.now(), role: 'user', text, card: null, time: now() }]);
     setInput('');
     setTyping(true);
-    setTimeout(() => {
-      const resp  = generateResponse(text);
-      const aiMsg = { id: Date.now() + 1, role: 'ai', text: resp.text, card: resp.card, time: now() };
-      setMessages(m => [...m, aiMsg]);
-      setTyping(false);
-      if (resp.card) {
-        setLogCount(c => c + 1);
-        setLogs(l => [{ ...resp.card, timestamp: now(), raw: text }, ...l]);
-      }
-    }, 1200 + Math.random() * 600);
+    const resp  = await generateResponse(text);
+    const aiMsg = { id: Date.now() + 1, role: 'ai', text: resp.text, card: resp.card, time: now() };
+    setMessages(m => [...m, aiMsg]);
+    setTyping(false);
+    if (resp.card) {
+      setLogCount(c => c + 1);
+      setLogs(l => [{ ...resp.card, timestamp: now(), raw: text }, ...l]);
+    }
   }, [input]);
 
   const handleKey = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } };
