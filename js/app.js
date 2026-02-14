@@ -108,7 +108,7 @@ function App() {
   const [typing, setTyping]   = useState(false);
   const [logCount, setLogCount] = useState(0);
   const [logs, setLogs]       = useState([]);
-  const [seedD]               = useState(seedData);
+  const [seedD]               = useState(seedData());
   const messagesEndRef        = useRef(null);
 
   useEffect(() => {
