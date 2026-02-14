@@ -3,25 +3,17 @@
 
 const GROK_API_KEY  = 'gsk_gZooPP2JtVirKe5xfGKe5xfGTmWGdyb3FYzidGDPBq8YdwyiYV5JRRaGnVY';
 const GROK_BASE_URL = 'https://api.groq.com/openai/v1';
-const GROK_MODEL    = 'llama-3.3-70b-versatile';
+const GROK_MODEL    = 'llama-3.1-8b-instant';
 
-const SYSTEM_PROMPT = `You are DigestiBot, an AI gut health assistant inside the DigestiGo app.
-Your job is to help users track their diet, physical activity, digestive symptoms, and energy levels through natural conversation.
+const SYSTEM_PROMPT = `You are DigestiBot, a gut health assistant in the DigestiGo app. Help users track diet, activity, symptoms, and energy through conversation.
 
-When a user tells you about food, activity, symptoms, or energy, respond helpfully with gut-health insights AND output a JSON log card at the END of your response.
+When tracking something, end your reply with exactly one LOG_CARD line:
+LOG_CARD:{"type":"food","title":"🥦 Food Log","data":{"Item(s)":"x","Est. Calories":"x kcal","Fiber":"xg","Portion":"x"}}
+LOG_CARD:{"type":"activity","title":"🏃 Activity Log","data":{"Activity":"x","Duration":"x min","Gut Benefit":"Motility ↑"}}
+LOG_CARD:{"type":"symptom","title":"⚠️ Symptom Log","data":{"Symptom":"x","Severity":"Mild/Moderate/Severe","Tip":"x"}}
+LOG_CARD:{"type":"energy","title":"⚡ Energy Log","data":{"Level":"High/Moderate/Low","Score":"x/10","Linked to":"Gut absorption"}}
 
-Always end your response with a JSON block in this exact format (no markdown fences, just raw JSON on its own line):
-LOG_CARD:{"type":"food|activity|symptom|energy","title":"emoji Title","data":{"Key":"Value",...}}
-
-Rules:
-- type must be one of: food, activity, symptom, energy
-- For food: include Item(s), Est. Calories, Fiber, Portion
-- For activity: include Activity, Duration, Gut Benefit
-- For symptom: include Symptom, Severity, Tip
-- For energy: include Level, Score, Linked to
-- If the message is a greeting or question (no tracking to log), omit the LOG_CARD line entirely.
-- Keep responses concise (2-4 sentences) and focused on digestive health.
-- Use **bold** for emphasis on key terms.`;
+For greetings or questions, reply normally with no LOG_CARD. Be concise (2-3 sentences). Use **bold** for key terms.`;
 
 const conversationHistory = [];
 
@@ -30,8 +22,12 @@ async function generateResponse(text) {
 
   let rawText;
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+
     const res = await fetch(`${GROK_BASE_URL}/chat/completions`, {
       method: 'POST',
+      signal: controller.signal,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${GROK_API_KEY}`,
@@ -42,10 +38,12 @@ async function generateResponse(text) {
           { role: 'system', content: SYSTEM_PROMPT },
           ...conversationHistory,
         ],
-        max_tokens: 300,
+        max_tokens: 200,
         temperature: 0.7,
       }),
     });
+
+    clearTimeout(timeout);
 
     if (!res.ok) {
       const err = await res.text();
@@ -55,7 +53,7 @@ async function generateResponse(text) {
     const data = await res.json();
     rawText = data.choices[0].message.content.trim();
   } catch (e) {
-    console.error('Grok API error:', e);
+    console.error('Groq API error:', e.name === 'AbortError' ? 'Request timed out' : e);
     rawText = "I'm having trouble connecting right now. Please try again in a moment.";
   }
 
