@@ -1,7 +1,7 @@
 /* ── Shared Navigation ─────────────────────────────────────────── */
 nav.site-nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: rgba(7, 11, 7, .85);
+  background: rgba(26, 30, 26, .95);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--border);
@@ -124,7 +124,15 @@ h2.section-heading {
 
 /* ── Responsive Nav ────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .nav-inner { flex-wrap: wrap; gap: 0; position: relative; }
+  nav.site-nav {
+    height: auto;
+    min-height: 64px;
+  }
+  .nav-inner {
+    flex-wrap: wrap; gap: 0; position: relative;
+    min-height: 64px;
+    align-items: center;
+  }
   .nav-hamburger { display: flex; order: 2; }
   .nav-cta { order: 3; display: none; }
 
@@ -133,18 +141,23 @@ h2.section-heading {
     display: none;
     flex-direction: column;
     width: 100%;
-    padding: 12px 0 16px;
+    padding: 8px 0 16px;
     border-top: 1px solid var(--border);
     gap: 0;
+    background: var(--bg);
   }
   .nav-links a {
-    padding: 12px 0;
+    padding: 12px 4px;
     font-size: 15px;
     border-bottom: 1px solid var(--border);
   }
   .nav-links a:last-child { border-bottom: none; }
 
   /* open state */
+  .site-nav.open {
+    background: var(--bg);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, .45);
+  }
   .site-nav.open .nav-links { display: flex; }
-  .site-nav.open .nav-cta   { display: inline-flex; width: 100%; justify-content: center; margin: 12px 0 4px; order: 5; }
+  .site-nav.open .nav-cta   { display: inline-flex; width: 100%; justify-content: center; margin: 12px 0 8px; order: 5; }
 }
