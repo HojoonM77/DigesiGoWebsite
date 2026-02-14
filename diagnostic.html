@@ -8,9 +8,17 @@
     .pass { background: #0a2e1a; color: #69f0ae; border-left-color: #69f0ae; }
     .fail { background: #2e1a0a; color: #ffab40; border-left-color: #ffab40; }
   </style>
+  <!-- Load React and Babel from CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
   <h1>📋 Diagnostic Tests</h1>
+  
+  <!-- Load our app's data and logic scripts -->
+  <script src="js/seed-data.js"></script>
+  <script src="js/ai-engine.js"></script>
   
   <script>
     // Test 1: Check JavaScript files

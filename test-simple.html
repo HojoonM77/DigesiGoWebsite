@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DigestiGo Simple</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body, #root { width: 100%; height: 100%; }
+    body { background: #070b07; color: #d6ead6; font-family: system-ui; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Load scripts in order -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="js/seed-data.js"></script>
+  <script src="js/ai-engine.js"></script>
+
+  <script>
+    console.log('=== PRE-BABEL CHECKS ===');
+    console.log('React:', typeof React);
+    console.log('ReactDOM:', typeof ReactDOM);
+    console.log('seedData:', typeof seedData);
+    console.log('generateResponse:', typeof generateResponse);
+  </script>
+
+  <script type="text/babel">
+    const { useState, useRef } = React;
+    
+    console.log('=== BABEL JSX STARTED ===');
+    
+    function SimpleApp() {
+      console.log('SimpleApp component called');
+      const [messages, setMessages] = useState([{ id: 1, text: 'Hello from DigestiBot!' }]);
+      const [input, setInput] = useState('');
+      
+      const sendMessage = () => {
+        if (!input.trim()) return;
+        setMessages(m => [...m, { id: Date.now(), text: input }]);
+        setInput('');
+      };
+      
+      return (
+        <div style={{ padding: '20px', background: '#0d140d', height: '100vh', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px', color: '#00e676' }}>
+            🌿 DigestiGo
+          </div>
+          <div style={{ flex: 1, overflowY: 'auto', marginBottom: '20px' }}>
+            {messages.map(msg => (
+              <div key={msg.id} style={{ padding: '10px', background: '#131f13', borderRadius: '8px', marginBottom: '8px' }}>
+                {msg.text}
+              </div>
+            ))}
+          </div>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <input 
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') sendMessage(); }}
+              placeholder="Type message..."
+              style={{ flex: 1, padding: '10px', background: '#131f13', color: '#d6ead6', border: 'none', borderRadius: '8px' }}
+            />
+            <button 
+              onClick={sendMessage}
+              style={{ padding: '10px 20px', background: '#00e676', color: '#000', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      );
+    }
+    
+    console.log('SimpleApp defined, rendering...');
+    try {
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<SimpleApp/>);
+      console.log('✅ App rendered!');
+    } catch (error) {
+      console.error('❌ Render error:', error);
+      console.error('Message:', error.message);
+      console.error('Stack:', error.stack);
+      document.getElementById('root').innerHTML = `<div style="padding: 20px; color: red; white-space: pre-wrap; font-family: monospace;">ERROR: ${error.message}<br/><br/>${error.stack}</div>`;
+    }
+  </script>
+</body>
+</html>
