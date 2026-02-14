@@ -27,6 +27,14 @@
   display: grid; grid-template-columns: 1fr 420px;
   gap: 60px; align-items: center; position: relative;
 }
+.hero-inner.hero-centered {
+  grid-template-columns: 1fr;
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+.hero-centered .hero-sub { margin-left: auto; margin-right: auto; }
+.hero-centered .hero-actions { justify-content: center; }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 5px 14px;
@@ -305,15 +313,45 @@
 
 /* ── RESPONSIVE ──────────────────────────────────────────────────── */
 @media (max-width: 900px) {
+  .hero { min-height: auto; padding: 100px 0 60px; }
   .hero-inner { grid-template-columns: 1fr; }
   .phone-wrap { display: none; }
   .features-grid { grid-template-columns: 1fr 1fr; }
-  .how-inner { grid-template-columns: 1fr; }
+  .how-inner { grid-template-columns: 1fr; gap: 40px; }
   .cat-grid { grid-template-columns: 1fr 1fr; }
   .testi-grid { grid-template-columns: 1fr; }
-  .demo-stage { flex-direction: column; }
+  .landing-section { padding: 60px 0; }
 }
-@media (max-width: 480px) {
-  .features-grid { grid-template-columns: 1fr; }
+
+@media (max-width: 640px) {
+  .hero { padding: 88px 0 48px; }
+  .hero-badge { font-size: 11px; }
+  .hero-actions { flex-direction: column; align-items: center; width: 100%; }
+  .hero-actions .btn-primary,
+  .hero-actions .btn-secondary { width: 100%; justify-content: center; }
+
+  .features-grid { grid-template-columns: 1fr; gap: 12px; }
+  .feat-card { padding: 20px; }
+
+  .cat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .cat-card { padding: 16px 12px; }
+  .cat-emoji { font-size: 26px; margin-bottom: 8px; }
+
+  .how-inner { gap: 32px; }
+  .chat-preview { display: none; }
+
+  .section-head-center { margin-bottom: 32px; }
+  .section-heading { font-size: clamp(22px, 6vw, 30px); }
+
+  .cta-section { padding: 60px 0; }
+  .cta-section h2 { font-size: clamp(24px, 7vw, 36px); }
+  .cta-btns { flex-direction: column; align-items: center; }
+  .appstore-btn { width: 100%; max-width: 260px; justify-content: center; }
+  .cta-btns .btn-secondary { width: 100%; max-width: 260px; justify-content: center; text-align: center; }
+
+  .landing-section { padding: 48px 0; }
+}
+
+@media (max-width: 400px) {
   .cat-grid { grid-template-columns: 1fr; }
 }
