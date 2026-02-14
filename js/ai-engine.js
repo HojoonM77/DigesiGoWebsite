@@ -2,8 +2,8 @@
 /* Exposes generateResponse(text) → Promise<{text, card}>         */
 
 const GROK_API_KEY  = 'gsk_gZooPP2JtVirKe5xfGKe5xfGTmWGdyb3FYzidGDPBq8YdwyiYV5JRRaGnVY';
-const GROK_BASE_URL = 'https://api.x.ai/v1';
-const GROK_MODEL    = 'grok-3-mini';
+const GROK_BASE_URL = 'https://api.groq.com/openai/v1';
+const GROK_MODEL    = 'llama-3.3-70b-versatile';
 
 const SYSTEM_PROMPT = `You are DigestiBot, an AI gut health assistant inside the DigestiGo app.
 Your job is to help users track their diet, physical activity, digestive symptoms, and energy levels through natural conversation.
