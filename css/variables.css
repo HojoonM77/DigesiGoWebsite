@@ -2,28 +2,28 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* Backgrounds */
-  --bg:          #070b07;
-  --surface:     #0d140d;
-  --surface2:    #131f13;
-  --surface3:    #192619;
+  /* Backgrounds — dark grey palette */
+  --bg:          #1a1e1a;
+  --surface:     #212621;
+  --surface2:    #292e29;
+  --surface3:    #313631;
 
   /* Borders */
-  --border:      #1b3020;
-  --border2:     #233b23;
+  --border:      #3a4a3a;
+  --border2:     #485248;
 
   /* Brand green */
   --green:       #00e676;
   --green-mid:   #00c853;
-  --green-dark:  #004d20;
+  --green-dark:  #1a4a2a;
   --green-glow:  rgba(0, 230, 118, .15);
-  --green-glow2: rgba(0, 230, 118, .06);
+  --green-glow2: rgba(0, 230, 118, .08);
 
   /* Text */
-  --text:        #d6ead6;
-  --text-dim:    #7a9f7a;
-  --text-muted:  #3a5c3a;
-  --white:       #f0f7f0;
+  --text:        #e2ece2;
+  --text-dim:    #94aa94;
+  --text-muted:  #5a7a5a;
+  --white:       #f4f9f4;
 
   /* Typography */
   --font:  'Segoe UI', system-ui, -apple-system, sans-serif;

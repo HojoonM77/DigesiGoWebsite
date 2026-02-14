@@ -209,8 +209,8 @@
 .cp-bubble {
   padding: 8px 12px; border-radius: 12px; font-size: 12px; max-width: 75%; line-height: 1.5;
 }
-.cp-msg.ai   .cp-bubble { background: #0f1f0f; border: 1px solid var(--border); border-bottom-left-radius: 3px; color: var(--text); }
-.cp-msg.user .cp-bubble { background: #0d2e1a; border: 1px solid #1a4a2e; border-bottom-right-radius: 3px; color: var(--text); }
+.cp-msg.ai   .cp-bubble { background: var(--surface2); border: 1px solid var(--border); border-bottom-left-radius: 3px; color: var(--text); }
+.cp-msg.user .cp-bubble { background: #1e3a28; border: 1px solid #2a5238; border-bottom-right-radius: 3px; color: var(--text); }
 .cp-mini-card {
   margin-top: 6px; padding: 6px 8px;
   background: var(--surface2); border: 1px solid var(--green-dark);

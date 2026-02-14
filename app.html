@@ -179,7 +179,7 @@ function LineChart({ data, color = '#00e676' }) {
         {pts.map(([x, y], i) => (
           <circle key={i} cx={x} cy={y}
             r={i === pts.length - 1 ? 4 : 2.5}
-            fill={i === pts.length - 1 ? color : '#0f150f'}
+            fill={i === pts.length - 1 ? color : '#2a302a'}
             stroke={color} strokeWidth="1.5"
           />
         ))}
@@ -211,7 +211,7 @@ function EnergyRing({ score }) {
   const gap  = C * (1 - pct);
   return (
     <svg className="ring-svg" width="90" height="90" viewBox="0 0 90 90">
-      <circle cx="45" cy="45" r={R} fill="none" stroke="#162016" strokeWidth="8"/>
+      <circle cx="45" cy="45" r={R} fill="none" stroke="#2e3a2e" strokeWidth="8"/>
       <circle cx="45" cy="45" r={R} fill="none" stroke="#00e676" strokeWidth="8"
         strokeDasharray={`${dash} ${gap}`} strokeLinecap="round"
         transform="rotate(-90 45 45)"
