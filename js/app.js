@@ -2,17 +2,20 @@
 /* Depends on: ai-engine.js, seed-data.js (loaded before this)    */
 /* Uses React 18 + ReactDOM via CDN, transpiled by Babel standalone */
 
-console.log('app.js loaded');
-console.log('React available?', typeof React !== 'undefined');
-console.log('ReactDOM available?', typeof ReactDOM !== 'undefined');
-console.log('seedData available?', typeof seedData !== 'undefined');
-console.log('generateResponse available?', typeof generateResponse !== 'undefined');
-console.log('HINTS available?', typeof HINTS !== 'undefined');
-console.log('SIDEBAR_PROMPTS available?', typeof SIDEBAR_PROMPTS !== 'undefined');
+console.log('📍 app.js: START - checking availability');
+console.log('📌 React available?', typeof React !== 'undefined');
+console.log('📌 ReactDOM available?', typeof ReactDOM !== 'undefined');
+console.log('📌 seedData available?', typeof seedData !== 'undefined');
+console.log('📌 generateResponse available?', typeof generateResponse !== 'undefined');
+console.log('📌 HINTS available?', typeof HINTS !== 'undefined');
+console.log('📌 SIDEBAR_PROMPTS available?', typeof SIDEBAR_PROMPTS !== 'undefined');
 
+console.log('📍 app.js: destructuring React hooks');
 const { useState, useEffect, useRef, useCallback } = React;
+console.log('📍 app.js: hooks destructured successfully');
 
 /* ── Chart Components ─────────────────────────────────────────── */
+console.log('📍 app.js: defining BarChart');
 function BarChart({ data, color = '#00e676' }) {
   const max = Math.max(...data.map(d => d.val), 1);
   return (
@@ -105,29 +108,39 @@ function EnergyRing({ score }) {
 }
 
 /* ── App ─────────────────────────────────────────────────────── */
+console.log('📍 app.js: defining App component');
 function App() {
-  console.log('App component rendering');
+  console.log('📍 App component called - initializing state');
   const [tab, setTab]         = useState('chat');
+  console.log('📍 App: tab state created');
   const [messages, setMessages] = useState([{
     id: 1, role: 'ai', card: null,
     text: 'Hello! I\'m **DigestiBot**, your AI gut health companion 🌿\n\nI\'m here to help you track your **diet**, **activity**, **digestive symptoms**, and **energy levels** — all through natural conversation.\n\nTell me what you\'ve eaten today, any symptoms you\'re feeling, or activities you\'ve done, and I\'ll log everything and offer digestive health insights!',
     time: '09:00',
   }]);
+  console.log('📍 App: messages state created');
   const [input, setInput]     = useState('');
+  console.log('📍 App: input state created');
   const [typing, setTyping]   = useState(false);
+  console.log('📍 App: typing state created');
   const [logCount, setLogCount] = useState(0);
+  console.log('📍 App: logCount state created');
   const [logs, setLogs]       = useState([]);
+  console.log('📍 App: logs state created');
   const [seedD]               = useState(() => {
+    console.log('📍 seedData initializer running');
     try {
       const data = seedData();
-      console.log('seedData initialized:', data);
+      console.log('📍 seedData initialized successfully');
       return data;
     } catch (e) {
-      console.error('seedData error:', e);
+      console.error('❌ seedData error:', e);
       return { todayStats: {}, calorieWeek: [], fiberWeek: [], stepsWeek: [], energyWeek: [], symptoms: [] };
     }
   });
+  console.log('📍 App: seedData state created');
   const messagesEndRef        = useRef(null);
+  console.log('📍 App: all state initialized successfully');
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -166,6 +179,8 @@ function App() {
   };
 
   const stats = seedD.todayStats;
+
+  console.log('📍 App: about to return JSX');
 
   return (
     <div className="app">
@@ -474,13 +489,17 @@ function App() {
 }
 
 try {
-  console.log('Starting React app render...');
+  console.log('📍 React render: starting...');
+  console.log('📍 React render: creating root...');
   const root = ReactDOM.createRoot(document.getElementById('root'));
-  console.log('Root created, rendering app...');
+  console.log('📍 React render: root created, calling render...');
   root.render(<App/>);
-  console.log('App rendered successfully');
+  console.log('✅ App rendered successfully!');
+  console.log('📍 React render: complete');
 } catch (error) {
-  console.error('Error rendering app:', error);
+  console.error('❌ Error rendering app:', error);
+  console.error('❌ Error message:', error.message);
+  console.error('❌ Error stack:', error.stack);
   const errorDiv = document.getElementById('error-display');
   if (errorDiv) {
     errorDiv.style.display = 'block';

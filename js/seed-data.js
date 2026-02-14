@@ -1,8 +1,11 @@
 /* ── Mock Seed Data & Constants ───────────────────────────────── */
 
+console.log('📍 seed-data.js: loading');
+
 const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 
 function seedData() {
+  console.log('📍 seedData() called');
   return {
     calorieWeek: DAYS.map((d, i) => ({ label: d, val: [1800,2100,1650,2200,1900,2400,1750][i], today: i === 6 })),
     fiberWeek:   DAYS.map((d, i) => ({ label: d, val: [22,18,28,15,24,30,19][i],              today: i === 6 })),

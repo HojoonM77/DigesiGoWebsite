@@ -1,6 +1,8 @@
 /* ── DigestiGo AI Engine — Grok API ───────────────────────────── */
 /* Exposes generateResponse(text) → Promise<{text, card}>         */
 
+console.log('📍 ai-engine.js: loading');
+
 const GROK_API_KEY  = 'gsk_gZooPP2JtVirKe5xfGKe5xfGTmWGdyb3FYzidGDPBq8YdwyiYV5JRRaGnVY';
 const GROK_BASE_URL = 'https://api.x.ai/v1';
 const GROK_MODEL    = 'grok-3-mini';

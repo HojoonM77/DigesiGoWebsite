@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { background: #070b07; color: #d6ead6; font-family: monospace; padding: 20px; }
+    .test { margin: 10px 0; padding: 10px; background: #131f13; border-left: 3px solid #00e676; }
+    .pass { background: #0a2e1a; color: #69f0ae; border-left-color: #69f0ae; }
+    .fail { background: #2e1a0a; color: #ffab40; border-left-color: #ffab40; }
+  </style>
+</head>
+<body>
+  <h1>📋 Diagnostic Tests</h1>
+  
+  <script>
+    // Test 1: Check JavaScript files
+    console.log('=== DIAGNOSTIC TESTS START ===');
+    
+    const tests = [];
+    
+    setTimeout(() => {
+      // Test seed data
+      console.log('\nTest 1: seed-data.js');
+      if (typeof seedData === 'function') {
+        try {
+          const data = seedData();
+          console.log('✅ seedData works:', Object.keys(data));
+          tests.push({ name: 'seedData', pass: true, msg: Object.keys(data).join(', ') });
+        } catch (e) {
+          console.log('❌ seedData error:', e.message);
+          tests.push({ name: 'seedData', pass: false, msg: e.message });
+        }
+      } else {
+        console.log('❌ seedData not defined');
+        tests.push({ name: 'seedData', pass: false, msg: 'Not defined' });
+      }
+
+      // Test AI engine
+      console.log('\nTest 2: ai-engine.js');
+      if (typeof generateResponse === 'function') {
+        console.log('✅ generateResponse function exists');
+        tests.push({ name: 'generateResponse', pass: true, msg: 'Function defined' });
+      } else {
+        console.log('❌ generateResponse not defined');
+        tests.push({ name: 'generateResponse', pass: false, msg: 'Not defined' });
+      }
+
+      // Test React
+      console.log('\nTest 3: React libraries');
+      if (typeof React !== 'undefined' && typeof ReactDOM !== 'undefined') {
+        console.log('✅ React and ReactDOM available');
+        tests.push({ name: 'React/ReactDOM', pass: true, msg: 'Both available' });
+      } else {
+        console.log('❌ React/ReactDOM missing');
+        tests.push({ name: 'React/ReactDOM', pass: false, msg: 'Not available' });
+      }
+
+      // Test Babel (simple JSX parsing)
+      console.log('\nTest 4: Babel JSX transpilation');
+      try {
+        // Try to create a simple JSX-like function
+        const result = Babel.transform('const x = <div>test</div>', { presets: ['react'] });
+        console.log('✅ Babel can transpile JSX');
+        tests.push({ name: 'Babel JSX', pass: true, msg: 'Transpilation works' });
+      } catch (e) {
+        console.log('❌ Babel error:', e.message);
+        tests.push({ name: 'Babel JSX', pass: false, msg: e.message });
+      }
+
+      // Display results
+      console.log('\n=== DIAGNOSTIC RESULTS ===');
+      const html = `
+        <h2>Test Results</h2>
+        ${tests.map(t => `
+          <div class="test ${t.pass ? 'pass' : 'fail'}">
+            <strong>${t.name}:</strong> ${t.pass ? '✅ PASS' : '❌ FAIL'} - ${t.msg}
+          </div>
+        `).join('')}
+        <div style="margin-top: 30px; padding: 20px; background: #0d140d; border-radius: 8px;">
+          <h3>Next Steps:</h3>
+          <ul>
+            <li>Check console tab (F12) for any error messages</li>
+            <li>Look for red/orange colored logs in the diagnostic results above</li>
+            <li>If seed-data or generateResponse failed, those files have issues</li>
+            <li>If React/Babel failed, the CDN links may be broken</li>
+          </ul>
+        </div>
+      `;
+      document.body.innerHTML += html;
+    }, 1000);
+  </script>
+</body>
+</html>
