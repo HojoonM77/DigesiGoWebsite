@@ -2,6 +2,14 @@
 /* Depends on: ai-engine.js, seed-data.js (loaded before this)    */
 /* Uses React 18 + ReactDOM via CDN, transpiled by Babel standalone */
 
+console.log('app.js loaded');
+console.log('React available?', typeof React !== 'undefined');
+console.log('ReactDOM available?', typeof ReactDOM !== 'undefined');
+console.log('seedData available?', typeof seedData !== 'undefined');
+console.log('generateResponse available?', typeof generateResponse !== 'undefined');
+console.log('HINTS available?', typeof HINTS !== 'undefined');
+console.log('SIDEBAR_PROMPTS available?', typeof SIDEBAR_PROMPTS !== 'undefined');
+
 const { useState, useEffect, useRef, useCallback } = React;
 
 /* ── Chart Components ─────────────────────────────────────────── */
@@ -98,6 +106,7 @@ function EnergyRing({ score }) {
 
 /* ── App ─────────────────────────────────────────────────────── */
 function App() {
+  console.log('App component rendering');
   const [tab, setTab]         = useState('chat');
   const [messages, setMessages] = useState([{
     id: 1, role: 'ai', card: null,
@@ -108,7 +117,16 @@ function App() {
   const [typing, setTyping]   = useState(false);
   const [logCount, setLogCount] = useState(0);
   const [logs, setLogs]       = useState([]);
-  const [seedD]               = useState(seedData());
+  const [seedD]               = useState(() => {
+    try {
+      const data = seedData();
+      console.log('seedData initialized:', data);
+      return data;
+    } catch (e) {
+      console.error('seedData error:', e);
+      return { todayStats: {}, calorieWeek: [], fiberWeek: [], stepsWeek: [], energyWeek: [], symptoms: [] };
+    }
+  });
   const messagesEndRef        = useRef(null);
 
   useEffect(() => {
@@ -136,15 +154,26 @@ function App() {
 
   const handleKey = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } };
 
-  const renderMarkdown = text =>
-    text
-      .replace(/\*\*(.+?)\*\*/g, '<strong style="color:#d4e8d4">$1</strong>')
-      .replace(/\n/g, '<br/>');
+  const renderMarkdown = text => {
+    try {
+      let result = text.replace(/\*\*([^\*]+)\*\*/g, '<strong style="color:#d4e8d4">$1</strong>');
+      result = result.replace(/\n/g, '<br/>');
+      return result;
+    } catch (e) {
+      console.error('renderMarkdown error:', e);
+      return text.replace(/\n/g, '<br/>');
+    }
+  };
 
   const stats = seedD.todayStats;
 
   return (
     <div className="app">
+      {/* Extremely visible test bar */}
+      <div style={{background: '#FFFF00', color: '#000', padding: '20px', fontSize: '20px', fontWeight: 'bold', textAlign: 'center'}}>
+        🎉 APP IS RENDERING 🎉
+      </div>
+      
       {/* App Header */}
       <header className="app-header">
         <div className="app-logo">
@@ -224,11 +253,11 @@ function App() {
                     <div className={`avatar ${msg.role}`}>{msg.role === 'ai' ? '🤖' : '👤'}</div>
                     <div>
                       <div className="bubble">
-                        <span dangerouslySetInnerHTML={{ __html: renderMarkdown(msg.text) }}/>
+                        <span>{msg.text}</span>
                         {msg.card && (
                           <div className="log-card">
                             <div className="log-card-title">{msg.card.title} — Logged</div>
-                            {Object.entries(msg.card.data).map(([k, v]) => (
+                            {Object.entries(msg.card.data || {}).map(([k, v]) => (
                               <div key={k} className="log-card-row">
                                 <span>{k}</span><span className="log-card-val">{v}</span>
                               </div>
@@ -444,4 +473,18 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+try {
+  console.log('Starting React app render...');
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  console.log('Root created, rendering app...');
+  root.render(<App/>);
+  console.log('App rendered successfully');
+} catch (error) {
+  console.error('Error rendering app:', error);
+  const errorDiv = document.getElementById('error-display');
+  if (errorDiv) {
+    errorDiv.style.display = 'block';
+    errorDiv.textContent = `APPLICATION ERROR\n\n${error.message}\n\nStack:\n${error.stack}\n\nContext:\nwindow.logs = ${JSON.stringify(window.logs || [], null, 2)}`;
+  }
+  document.getElementById('root').innerHTML = `<div style="color: #ff5252; padding: 20px; font-family: monospace; white-space: pre-wrap;">ERROR: ${error.message}</div>`;
+}

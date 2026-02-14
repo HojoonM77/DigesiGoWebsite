@@ -17,9 +17,101 @@
 <body>
   <div id="root"></div>
 
+  <!-- Fallback error display -->
+  <style>
+    #error-display {
+      display: none;
+      position: fixed;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      background: #070b07 !important;
+      color: #ff5252 !important;
+      padding: 40px !important;
+      font-family: 'Courier New', monospace !important;
+      font-size: 16px !important;
+      overflow: auto !important;
+      z-index: 100000 !important;
+      white-space: pre-wrap !important;
+      word-break: break-all !important;
+    }
+    #error-display li {
+      margin: 5px 0 !important;
+      list-style: none !important;
+      padding-left: 20px !important;
+    }
+    #debug-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #FFFF00 !important;
+      color: #000 !important;
+      padding: 30px !important;
+      z-index: 99999 !important;
+      font-size: 24px !important;
+      font-weight: bold !important;
+      text-align: center !important;
+    }
+  </style>
+  <div id="debug-bar"></div>
+  <div id="error-display"></div>
+
   <!-- App data & logic (plain JS, loaded before Babel JSX) -->
   <script src="js/seed-data.js"></script>
   <script src="js/ai-engine.js"></script>
+
+  <!-- Error handler and logging -->
+  <script>
+    window.logs = [];
+    
+    // Update debug bar with status
+    const debugBar = document.getElementById('debug-bar');
+    debugBar.innerHTML = '⏳ Loading...';
+    
+    const origLog = console.log;
+    const origError = console.error;
+    const origWarn = console.warn;
+    
+    console.log = function(...args) {
+      origLog(...args);
+      debugBar.innerHTML = '📋 ' + args[0];
+      window.logs.push('[LOG] ' + args.map(a => typeof a === 'object' ? String(a) : String(a)).join(' '));
+    };
+    console.error = function(...args) {
+      origError(...args);
+      debugBar.innerHTML = '❌ ERROR: ' + args[0];
+      window.logs.push('[ERROR] ' + args.map(a => typeof a === 'object' ? String(a) : String(a)).join(' '));
+    };
+    console.warn = function(...args) {
+      origWarn(...args);
+      window.logs.push('[WARN] ' + args.map(a => typeof a === 'object' ? String(a) : String(a)).join(' '));
+    };
+    
+    window.addEventListener('error', (event) => {
+      debugBar.innerHTML = '⚠️ GLOBAL ERROR: ' + (event.error?.message || String(event));
+      console.error('Global error:', event.error);
+    });
+    window.addEventListener('unhandledrejection', (event) => {
+      debugBar.innerHTML = '⚠️ UNHANDLED: ' + String(event.reason);
+      console.error('Unhandled promise rejection:', event.reason);
+    });
+    
+    // Show logs/errors after 4 seconds if page is still black
+    setTimeout(() => {
+      if (!document.querySelector('.app')) {
+        const errorDiv = document.getElementById('error-display');
+        if (errorDiv) {
+          errorDiv.style.display = 'block';
+          errorDiv.innerHTML = '<strong style="color: #ff5252; font-size: 20px;">⚠️ APPLICATION DID NOT RENDER</strong>\n\n' + window.logs.map(l => `${l}`).join('\n\n');
+        }
+        debugBar.innerHTML = '❌ APP FAILED TO RENDER - CHECK RED ERROR BELOW';
+      } else {
+        debugBar.style.display = 'none';
+      }
+    }, 4000);
+  </script>
 
   <!-- React app (JSX transpiled by Babel standalone) -->
   <script type="text/babel" src="js/app.js"></script>

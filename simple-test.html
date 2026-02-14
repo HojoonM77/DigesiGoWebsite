@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DigestiGo Simple Test</title>
+  <style>
+    body {
+      background: #070b07;
+      color: #d6ead6;
+      font-family: system-ui;
+      margin: 0;
+      padding: 0;
+    }
+    #root {
+      padding: 20px;
+      min-height: 100vh;
+    }
+    button {
+      padding: 10px 20px;
+      background: #00e676;
+      color: #000;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+  <!-- React 18 + Babel (CDN) -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function SimpleApp() {
+      const [count, setCount] = useState(0);
+      const [input, setInput] = useState('');
+
+      return (
+        <div>
+          <h1>DigestiGo Simple Test</h1>
+          <p>React is working!</p>
+          <p>Count: {count}</p>
+          <button onClick={() => setCount(c => c + 1)}>Increment</button>
+          
+          <div style={{ marginTop: '20px' }}>
+            <input 
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type something..."
+              style={{padding: '8px', width: '300px'}}
+            />
+            <p>You typed: {input}</p>
+          </div>
+        </div>
+      );
+    }
+
+    try {
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<SimpleApp/>);
+    } catch (error) {
+      document.getElementById('root').innerHTML = `<pre style="color: red;">ERROR: ${error.message}\n\n${error.stack}</pre>`;
+    }
+  </script>
+</body>
+</html>

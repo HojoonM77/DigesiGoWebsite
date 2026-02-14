@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DigestiGo Minimal</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body, #root { width: 100%; height: 100%; display: block; }
+    body { background: #070b07; color: #d6ead6; font-family: system-ui; }
+    #root { display: flex; flex-direction: column; }
+    .app { flex: 1; display: flex; flex-direction: column; background: #070b07; }
+    .header { background: #0d140d; border-bottom: 1px solid #1b3020; padding: 20px; font-size: 18px; font-weight: bold; }
+    .content { flex: 1; padding: 20px; overflow: auto; }
+    button { padding: 10px 20px; background: #00e676; color: #000; border: none; cursor: pointer; border-radius: 8px; }
+    input { padding: 8px; background: #131f13; color: #d6ead6; border: 1px solid #1b3020; border-radius: 6px; font-family: system-ui; }
+  </style>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script>
+    console.log('Page load started');
+    document.addEventListener('DOMContentLoaded', () => console.log('DOM loaded'));
+  </script>
+
+  <script type="text/babel">
+    console.log('Babel script executing');
+    const { useState } = React;
+
+    function App() {
+      const [input, setInput] = useState('');
+      const [messages, setMessages] = useState([
+        { id: 1, text: 'Hello! I\'m DigestiBot, your AI gut health companion 🌿', time: '09:00' }
+      ]);
+
+      const sendMessage = () => {
+        if (!input.trim()) return;
+        setMessages(m => [...m, { id: Date.now(), text: input, time: new Date().toLocaleTimeString() }]);
+        setInput('');
+      };
+
+      return (
+        <div className="app">
+          <div className="header">🌿 DigestiGo</div>
+          <div className="content">
+            {messages.map(msg => (
+              <div key={msg.id} style={{marginBottom: '10px', padding: '8px', background: '#131f13', borderRadius: '8px'}}>
+                <div>{msg.text}</div>
+                <div style={{fontSize: '11px', color: '#7a9f7a', marginTop: '4px'}}>{msg.time}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{padding: '16px', borderTop: '1px solid #1b3020'}}>
+            <div style={{display: 'flex', gap: '10px'}}>
+              <input 
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') sendMessage(); }}
+                placeholder="Type a message..."
+                style={{flex: 1}}
+              />
+              <button onClick={sendMessage}>Send</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    console.log('App defined, rendering...');
+    try {
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App/>);
+      console.log('App rendered successfully');
+    } catch (error) {
+      console.error('Render error:', error);
+      document.getElementById('root').innerHTML = `<div style="background: red; color: white; padding: 20px; white-space: pre-wrap; font-family: monospace;">ERROR:\n${error.message}\n\n${error.stack}</div>`;
+    }
+  </script>
+</body>
+</html>

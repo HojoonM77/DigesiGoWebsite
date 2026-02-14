@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <script>
+    console.log('Test started');
+    
+    // Test renderMarkdown function
+    const renderMarkdown = text =>
+      text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br/>');
+    
+    const testText = 'Hello! I\'m **DigestiBot**, your AI gut health companion 🌿\n\nI\'m here to help you track your **diet**, **activity**, **digestive symptoms**, and **energy levels** — all through natural conversation.\n\nTell me what you\'ve eaten today, any symptoms you\'re feeling, or activities you\'ve done, and I\'ll log everything and offer digestive health insights!';
+    
+    try {
+      const result = renderMarkdown(testText);
+      console.log('Markdown rendered successfully');
+      console.log('Result length:', result.length);
+      console.log('Contains <strong>:', result.includes('<strong>'));
+      console.log('Contains <br/>:', result.includes('<br/>'));
+    } catch (e) {
+      console.error('Markdown error:', e.message);
+    }
+    
+    // Test React rendering
+    const { useState } = React;
+    
+    function SimpleApp() {
+      const [count, setCount] = useState(0);
+      return (
+        <div style={{ padding: '20px', color: '#0f0', background: '#000' }}>
+          <h1>React Works!</h1>
+          <p>Count: {count}</p>
+          <button onClick={() => setCount(c => c + 1)}>Increment</button>
+        </div>
+      );
+    }
+    
+    try {
+      console.log('Creating React root...');
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      console.log('Rendering app...');
+      root.render(<SimpleApp/>);
+      console.log('Rendered successfully');
+    } catch (e) {
+      console.error('React error:', e.message);
+      document.getElementById('root').innerHTML = `<pre style="color: red;">Error: ${e.message}</pre>`;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>React Test</title>
+  <style>
+    body { background: #070b07; color: #d6ead6; font-family: system-ui; padding: 20px; }
+    #root { min-height: 100vh; }
+  </style>
+  <!-- React 18 + Babel (CDN) -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    try {
+      console.log('Test started');
+      console.log('React:', typeof React);
+      console.log('ReactDOM:', typeof ReactDOM);
+      
+      function TestApp() {
+        return <div>
+          <h1>React is working!</h1>
+          <p>If you see this, React is loading correctly.</p>
+        </div>;
+      }
+      
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<TestApp/>);
+      console.log('Test app rendered');
+    } catch (e) {
+      console.error('Test error:', e);
+      document.getElementById('root').innerHTML = `<div style="color: red; white-space: pre-wrap; font-family: monospace;">${e.message}<br/>${e.stack}</div>`;
+    }
+  </script>
+</body>
+</html>
