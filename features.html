@@ -95,32 +95,32 @@
           <span class="fv-title">DigestiBot Chat</span>
         </div>
         <div class="fv-chat">
+          <div class="fv-msg ai"><div class="fv-bubble" style="font-size:11px;color:var(--text-dim)">Hi! I'm your digestive health assistant. How are you feeling today? Feel free to share any stomach issues or digestive concerns.</div></div>
           <div class="fv-msg user"><div class="fv-bubble">Had a chicken sandwich and some yogurt for lunch</div></div>
           <div class="fv-msg ai">
             <div class="fv-bubble">
               Logged! Chicken is a great protein source, and yogurt adds some dairy to your day. Good balanced meal.
               <div class="fv-card">
                 <div class="fv-card-title">Entry — Saved</div>
-                <div class="fv-card-row"><span>Items</span><span class="fv-card-val">chicken sandwich, yogurt</span></div>
-                <div class="fv-card-row"><span>Categories</span><span class="fv-card-val">proteins, dairy</span></div>
+                <div class="fv-card-row"><span>Summary</span><span class="fv-card-val">Ate chicken sandwich and yogurt</span></div>
               </div>
               <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap">
-                <span style="padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600;background:#0d2e1a;color:#4dd0a0;border:1px solid #1a4a3a">Dietary</span>
+                <span style="padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600;background:#0d2a28;color:#4ECDC4;border:1px solid #1a3e3c">Dietary</span>
               </div>
             </div>
           </div>
           <div class="fv-msg user"><div class="fv-bubble">Felt really bloated and crampy after — maybe the dairy?</div></div>
           <div class="fv-msg ai">
             <div class="fv-bubble">
-              That's worth noting. Dairy can trigger digestive discomfort for some people. I've logged this as a possible trigger.
+              That's worth noting. Dairy can trigger digestive discomfort for some people. I've logged this as a symptom and a possible trigger.
               <div class="fv-card">
-                <div class="fv-card-title">Entry — Saved</div>
-                <div class="fv-card-row"><span>Symptom</span><span class="fv-card-val">bloating, cramping</span></div>
-                <div class="fv-card-row"><span>Possible trigger</span><span class="fv-card-val">dairy (yogurt)</span></div>
+                <div class="fv-card-title">Entries — Saved</div>
+                <div class="fv-card-row"><span>Symptom</span><span class="fv-card-val">Experiencing bloating and cramping</span></div>
+                <div class="fv-card-row"><span>Trigger</span><span class="fv-card-val">Dairy may trigger bloating - Take Caution!</span></div>
               </div>
               <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap">
-                <span style="padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600;background:#2e0d0d;color:#ff7070;border:1px solid #4a1a1a">Symptom</span>
-                <span style="padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600;background:#2e1a0a;color:var(--warn);border:1px solid #4a2e0a">Trigger</span>
+                <span style="padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600;background:#2e0d0d;color:#FF6B6B;border:1px solid #4a1a1a">Symptom</span>
+                <span style="padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600;background:#2e2a0d;color:#FFE66D;border:1px solid #4a3e0a">Trigger</span>
               </div>
             </div>
           </div>
@@ -179,7 +179,7 @@
         <ul class="feature-bullets">
           <li>Logs common digestive symptoms: bloating, nausea, cramping, fatigue, reflux, and more</li>
           <li>Symptoms are timestamped and listed in the Tracker dashboard for easy review</li>
-          <li>AI identifies when symptoms consistently follow specific foods (trigger detection)</li>
+          <li>When a symptom is caused by a food, the AI automatically logs it as a trigger too</li>
           <li>All logged symptoms appear in the exported PDF report under Clinical Symptoms</li>
         </ul>
       </div>
@@ -187,15 +187,23 @@
         <div class="fv-header">
           <span class="fv-title">Today's Symptoms</span>
         </div>
-        <div class="fv-symptom-list">
-          <div class="fv-symptom"><span class="fv-sym-name">Bloating</span><span class="fv-sym-sev mild">Mild</span></div>
-          <div class="fv-symptom"><span class="fv-sym-name">Gas</span><span class="fv-sym-sev mild">Mild</span></div>
-          <div class="fv-symptom"><span class="fv-sym-name">Nausea</span><span class="fv-sym-sev none">None</span></div>
-          <div class="fv-symptom"><span class="fv-sym-name">Reflux</span><span class="fv-sym-sev none">None</span></div>
-          <div class="fv-symptom"><span class="fv-sym-name">Cramping</span><span class="fv-sym-sev moderate">Moderate</span></div>
-        </div>
-        <div style="margin-top:14px;padding:10px 12px;background:var(--surface3);border-radius:6px;font-size:11px;color:var(--text-dim)">
-          <span style="color:var(--warn);font-weight:600">AI note:</span> Cramping logged alongside dairy entries on 3 of your last 5 days.
+        <div style="display:flex;flex-direction:column;gap:7px;margin-top:4px">
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface3);border-radius:4px;font-size:11px">
+            <span style="width:8px;height:8px;border-radius:50%;background:#FF6B6B;flex-shrink:0"></span>
+            <span style="color:var(--text-dim)">Experiencing bloating after dinner</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface3);border-radius:4px;font-size:11px">
+            <span style="width:8px;height:8px;border-radius:50%;background:#FF6B6B;flex-shrink:0"></span>
+            <span style="color:var(--text-dim)">Feeling nauseous this morning</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface3);border-radius:4px;font-size:11px">
+            <span style="width:8px;height:8px;border-radius:50%;background:#FF6B6B;flex-shrink:0"></span>
+            <span style="color:var(--text-dim)">Stomach cramping, mild discomfort</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface3);border-radius:4px;font-size:11px">
+            <span style="width:8px;height:8px;border-radius:50%;background:#FF6B6B;flex-shrink:0"></span>
+            <span style="color:var(--text-dim)">Feeling tired and sluggish</span>
+          </div>
         </div>
       </div>
     </div>
@@ -212,8 +220,8 @@
         <p>When a message implies a cause-and-effect relationship between food and a symptom — "pizza makes me bloated" — DigestiGo flags it as a trigger entry, categorised as both dietary and trigger simultaneously.</p>
         <ul class="feature-bullets">
           <li>Multi-category entries: a single message can be dietary + trigger at the same time</li>
+          <li>Trigger summary format: "<em style="color:var(--text)">[Food] may trigger [symptom] — Take Caution!</em>"</li>
           <li>Triggers are stored separately and shown on the Tracker dashboard</li>
-          <li>Common trigger patterns: dairy, wheat, spicy food, high-fat meals</li>
           <li>Trigger list exported in the PDF report under Identified Trigger Factors</li>
         </ul>
       </div>
@@ -228,19 +236,24 @@
               That's a clear pattern worth tracking. I've logged spicy food as a trigger for reflux.
               <div class="fv-card">
                 <div class="fv-card-title">Entry — Saved</div>
-                <div class="fv-card-row"><span>Trigger food</span><span class="fv-card-val">Spicy food</span></div>
-                <div class="fv-card-row"><span>Symptom</span><span class="fv-card-val">Reflux</span></div>
+                <div class="fv-card-row"><span>Summary</span><span class="fv-card-val">Spicy food may trigger reflux - Take Caution!</span></div>
               </div>
               <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap">
-                <span style="padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600;background:#0d2e1a;color:#4dd0a0;border:1px solid #1a4a3a">Dietary</span>
-                <span style="padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600;background:#2e1a0a;color:var(--warn);border:1px solid #4a2e0a">Trigger</span>
+                <span style="padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600;background:#0d2a28;color:#4ECDC4;border:1px solid #1a3e3c">Dietary</span>
+                <span style="padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600;background:#2e2a0d;color:#FFE66D;border:1px solid #4a3e0a">Trigger</span>
               </div>
             </div>
           </div>
         </div>
-        <div class="fv-metrics" style="margin-top:14px">
-          <div class="fv-metric"><div class="fv-metric-val">6</div><div class="fv-metric-label">Triggers logged</div></div>
-          <div class="fv-metric"><div class="fv-metric-val">3</div><div class="fv-metric-label">Distinct foods</div></div>
+        <div style="display:flex;flex-direction:column;gap:7px;margin-top:14px;font-size:11px">
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface3);border-radius:4px">
+            <span style="width:8px;height:8px;border-radius:50%;background:#FFE66D;flex-shrink:0"></span>
+            <span style="color:var(--text-dim)">Spicy food may trigger reflux - Take Caution!</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface3);border-radius:4px">
+            <span style="width:8px;height:8px;border-radius:50%;background:#FFE66D;flex-shrink:0"></span>
+            <span style="color:var(--text-dim)">Dairy may trigger bloating - Take Caution!</span>
+          </div>
         </div>
       </div>
     </div>
@@ -270,16 +283,16 @@
           <div style="padding:10px 12px;background:var(--surface3);border-radius:6px;font-size:11px">
             <div style="color:var(--text-muted);font-family:var(--mono);font-size:10px;margin-bottom:6px">SYMPTOMS</div>
             <div style="display:flex;flex-direction:column;gap:4px">
-              <div style="color:var(--text-dim)">• Bloating after dinner</div>
-              <div style="color:var(--text-dim)">• Nausea this morning</div>
-              <div style="color:var(--text-dim)">• Cramping — mild</div>
+              <div style="color:var(--text-dim)">• Experiencing bloating after dinner</div>
+              <div style="color:var(--text-dim)">• Feeling nauseous this morning</div>
+              <div style="color:var(--text-dim)">• Stomach cramping, mild discomfort</div>
             </div>
           </div>
           <div style="padding:10px 12px;background:var(--surface3);border-radius:6px;font-size:11px">
             <div style="color:var(--text-muted);font-family:var(--mono);font-size:10px;margin-bottom:6px">TRIGGERS</div>
             <div style="display:flex;flex-direction:column;gap:4px">
-              <div style="color:var(--text-dim)">• Dairy → bloating</div>
-              <div style="color:var(--text-dim)">• Spicy food → reflux</div>
+              <div style="color:var(--text-dim)">• Dairy may trigger bloating - Take Caution!</div>
+              <div style="color:var(--text-dim)">• Spicy food may trigger reflux - Take Caution!</div>
             </div>
           </div>
           <div style="padding:10px 12px;background:rgba(0,230,118,.04);border:1px solid var(--green-dark);border-radius:6px;font-size:11px">
@@ -315,7 +328,7 @@
         <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;font-size:11px">
           <div style="padding:8px 12px;background:var(--surface3);border-radius:4px;border-left:3px solid var(--green)">
             <div style="color:var(--green);font-weight:600;margin-bottom:3px">I. Clinical Symptoms</div>
-            <div style="color:var(--text-dim)">Bloating · Nausea · Cramping (mild)</div>
+            <div style="color:var(--text-dim)">Experiencing bloating after dinner<br/>Feeling nauseous this morning<br/>Stomach cramping, mild discomfort</div>
           </div>
           <div style="padding:8px 12px;background:var(--surface3);border-radius:4px;border-left:3px solid #4dd0a0">
             <div style="color:#4dd0a0;font-weight:600;margin-bottom:3px">II. Nutritional Intake Analysis</div>
@@ -326,7 +339,7 @@
           </div>
           <div style="padding:8px 12px;background:var(--surface3);border-radius:4px;border-left:3px solid var(--warn)">
             <div style="color:var(--warn);font-weight:600;margin-bottom:3px">III. Trigger Factors</div>
-            <div style="color:var(--text-dim)">Dairy → bloating · Spicy food → reflux</div>
+            <div style="color:var(--text-dim)">Dairy may trigger bloating - Take Caution!<br/>Spicy food may trigger reflux - Take Caution!</div>
           </div>
         </div>
       </div>
