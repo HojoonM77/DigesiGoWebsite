@@ -174,51 +174,26 @@
 }
 
 /* ── HOW IT WORKS ───────────────────────────────────────────────── */
-.how-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-.steps { display: flex; flex-direction: column; }
-.step { display: flex; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--border); }
-.step:last-child { border-bottom: none; }
-.step-num {
-  width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;
-  background: var(--green-dark); border: 1px solid rgba(0,230,118,.3);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 800; color: var(--green); font-family: var(--mono);
-}
-.step-content h3 { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
-.step-content p  { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+.how-head { text-align: center; max-width: 600px; margin: 0 auto 56px; }
+.how-head .section-label { justify-content: center; }
+.how-head .section-sub { margin: 0 auto; }
 
-/* Chat preview */
-.chat-preview {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 8px; padding: 20px; overflow: hidden;
+.steps-full { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+.step-full {
+  display: flex; flex-direction: column; gap: 20px;
+  padding: 40px 36px;
+  border-right: 1px solid var(--border);
+  position: relative;
 }
-.chat-preview-header {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
-  padding-bottom: 14px; border-bottom: 1px solid var(--border);
-}
-.cp-avatar {
-  width: 30px; height: 30px; border-radius: 4px;
+.step-full:last-child { border-right: none; }
+.step-num-lg {
+  width: 48px; height: 48px; border-radius: 6px; flex-shrink: 0;
   background: var(--green-dark); border: 1px solid rgba(0,230,118,.3);
   display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 800; color: var(--green); font-family: var(--mono);
 }
-.cp-name   { font-size: 13px; font-weight: 600; color: var(--white); }
-.cp-status { font-size: 11px; color: var(--green); }
-.cp-dot    { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 4px; animation: pulse 2s infinite; }
-.cp-msg    { margin-bottom: 10px; display: flex; gap: 8px; align-items: flex-start; }
-.cp-msg.user { flex-direction: row-reverse; }
-.cp-bubble {
-  padding: 8px 12px; border-radius: 6px; font-size: 12px; max-width: 75%; line-height: 1.5;
-}
-.cp-msg.ai   .cp-bubble { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
-.cp-msg.user .cp-bubble { background: #1e3a28; border: 1px solid #2a5238; color: var(--text); }
-.cp-mini-card {
-  margin-top: 6px; padding: 6px 8px;
-  background: var(--surface2); border: 1px solid var(--green-dark);
-  border-radius: 4px; font-size: 10px;
-}
-.cp-mini-title { color: var(--green); font-weight: 600; margin-bottom: 3px; }
-.cp-mini-row   { display: flex; justify-content: space-between; color: var(--text-dim); padding: 1px 0; }
-.cp-mini-val   { color: var(--text); font-family: var(--mono); }
+.step-content-lg h3 { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+.step-content-lg p  { font-size: 14px; color: var(--text-dim); line-height: 1.7; }
 
 /* ── TRACKING CATEGORIES ─────────────────────────────────────────── */
 .cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 48px; }
@@ -317,7 +292,9 @@
   .hero-inner { grid-template-columns: 1fr; }
   .phone-wrap { display: none; }
   .features-grid { grid-template-columns: 1fr 1fr; }
-  .how-inner { grid-template-columns: 1fr; gap: 40px; }
+  .steps-full { grid-template-columns: 1fr; }
+  .step-full { border-right: none; border-bottom: 1px solid var(--border); padding: 28px 0; }
+  .step-full:last-child { border-bottom: none; }
   .cat-grid { grid-template-columns: 1fr 1fr; }
   .testi-grid { grid-template-columns: 1fr; }
   .landing-section { padding: 60px 0; }
@@ -336,9 +313,6 @@
   .cat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
   .cat-card { padding: 16px 12px; }
   .cat-emoji { font-size: 26px; margin-bottom: 8px; }
-
-  .how-inner { gap: 32px; }
-  .chat-preview { display: none; }
 
   .section-head-center { margin-bottom: 32px; }
   .section-heading { font-size: clamp(22px, 6vw, 30px); }
