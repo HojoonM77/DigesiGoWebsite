@@ -39,7 +39,7 @@
   display: inline-flex; align-items: center; gap: 8px;
   padding: 5px 14px;
   background: var(--surface2); border: 1px solid var(--border2);
-  border-radius: 20px; font-size: 12px; color: var(--green);
+  border-radius: 4px; font-size: 12px; color: var(--green);
   font-weight: 600; margin-bottom: 20px; letter-spacing: .3px;
 }
 .hero-badge .dot {
@@ -159,16 +159,16 @@
 .feat-card:hover::before { opacity: 1; }
 .feat-card:hover::after  { opacity: 1; animation: glowSweep 1.2s linear infinite; }
 .feat-icon {
-  width: 48px; height: 48px; border-radius: 12px;
+  width: 40px; height: 40px; border-radius: 6px;
   background: var(--green-dark); border: 1px solid rgba(0,230,118,.2);
   display: flex; align-items: center; justify-content: center;
-  font-size: 22px; margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 .feat-card h3 { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
 .feat-card p  { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
 .feat-tag {
   display: inline-block; margin-top: 14px;
-  padding: 3px 10px; border-radius: 8px;
+  padding: 3px 10px; border-radius: 3px;
   font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
   background: var(--green-dark); color: var(--green);
 }
@@ -179,7 +179,7 @@
 .step { display: flex; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--border); }
 .step:last-child { border-bottom: none; }
 .step-num {
-  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;
   background: var(--green-dark); border: 1px solid rgba(0,230,118,.3);
   display: flex; align-items: center; justify-content: center;
   font-size: 13px; font-weight: 800; color: var(--green); font-family: var(--mono);
@@ -190,16 +190,16 @@
 /* Chat preview */
 .chat-preview {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: 20px; padding: 20px; overflow: hidden;
+  border-radius: 8px; padding: 20px; overflow: hidden;
 }
 .chat-preview-header {
   display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
   padding-bottom: 14px; border-bottom: 1px solid var(--border);
 }
 .cp-avatar {
-  width: 30px; height: 30px; border-radius: 50%;
+  width: 30px; height: 30px; border-radius: 4px;
   background: var(--green-dark); border: 1px solid rgba(0,230,118,.3);
-  display: flex; align-items: center; justify-content: center; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
 }
 .cp-name   { font-size: 13px; font-weight: 600; color: var(--white); }
 .cp-status { font-size: 11px; color: var(--green); }
@@ -207,14 +207,14 @@
 .cp-msg    { margin-bottom: 10px; display: flex; gap: 8px; align-items: flex-start; }
 .cp-msg.user { flex-direction: row-reverse; }
 .cp-bubble {
-  padding: 8px 12px; border-radius: 12px; font-size: 12px; max-width: 75%; line-height: 1.5;
+  padding: 8px 12px; border-radius: 6px; font-size: 12px; max-width: 75%; line-height: 1.5;
 }
-.cp-msg.ai   .cp-bubble { background: var(--surface2); border: 1px solid var(--border); border-bottom-left-radius: 3px; color: var(--text); }
-.cp-msg.user .cp-bubble { background: #1e3a28; border: 1px solid #2a5238; border-bottom-right-radius: 3px; color: var(--text); }
+.cp-msg.ai   .cp-bubble { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
+.cp-msg.user .cp-bubble { background: #1e3a28; border: 1px solid #2a5238; color: var(--text); }
 .cp-mini-card {
   margin-top: 6px; padding: 6px 8px;
   background: var(--surface2); border: 1px solid var(--green-dark);
-  border-radius: 7px; font-size: 10px;
+  border-radius: 4px; font-size: 10px;
 }
 .cp-mini-title { color: var(--green); font-weight: 600; margin-bottom: 3px; }
 .cp-mini-row   { display: flex; justify-content: space-between; color: var(--text-dim); padding: 1px 0; }
@@ -225,15 +225,15 @@
 .cat-card {
   padding: 24px 20px; border-radius: var(--radius);
   background: var(--surface2); border: 1px solid var(--border);
-  text-align: center; transition: all .2s;
+  text-align: left; transition: all .2s;
 }
-.cat-card:hover { transform: translateY(-3px); border-color: var(--border2); }
-.cat-emoji { font-size: 32px; margin-bottom: 12px; display: block; }
+.cat-card:hover { border-color: var(--border2); }
+.cat-icon { width: 32px; height: 32px; margin-bottom: 14px; color: var(--green); display: block; }
 .cat-card h3 { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
 .cat-card p  { font-size: 12px; color: var(--text-dim); line-height: 1.55; }
-.cat-items   { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; }
+.cat-items   { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 5px; }
 .cat-pill {
-  padding: 3px 8px; border-radius: 8px; font-size: 10px;
+  padding: 3px 8px; border-radius: 3px; font-size: 10px;
   background: var(--surface3); border: 1px solid var(--border); color: var(--text-dim);
 }
 
@@ -297,7 +297,7 @@
 .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 .appstore-btn {
   display: inline-flex; align-items: center; gap: 10px;
-  padding: 14px 24px; border-radius: 14px;
+  padding: 14px 24px; border-radius: 6px;
   background: var(--surface2); border: 1px solid var(--border2);
   text-decoration: none; color: var(--white); transition: all .2s;
 }
@@ -306,7 +306,7 @@
   box-shadow: 0 0 20px var(--green-glow);
   transform: translateY(-2px);
 }
-.appstore-btn .as-icon { font-size: 26px; }
+.appstore-btn .as-icon { display: flex; align-items: center; color: var(--white); }
 .appstore-btn .as-text { text-align: left; }
 .appstore-btn .as-sub  { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; }
 .appstore-btn .as-main { font-size: 15px; font-weight: 700; }
