@@ -35,58 +35,15 @@
 
 /* ── MISSION STATEMENT ──────────────────────────────────────────── */
 .mission-section { padding: 90px 0; }
-.mission-inner {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
-}
+.mission-body-only { max-width: 680px; margin: 0 auto; }
 .mission-quote {
   font-size: clamp(18px, 2.5vw, 26px); font-weight: 700;
   color: var(--white); line-height: 1.4; letter-spacing: -.3px;
   border-left: 3px solid var(--green); padding-left: 24px; margin-bottom: 24px;
 }
-.mission-body { font-size: 14px; color: var(--text-dim); line-height: 1.75; }
+.mission-body { font-size: 15px; color: var(--text-dim); line-height: 1.75; }
 .mission-body p { margin-bottom: 16px; }
 .mission-body p:last-child { margin-bottom: 0; }
-
-.mission-stats { display: flex; flex-direction: column; gap: 20px; }
-.mission-stat-card {
-  padding: 22px 24px; border-radius: var(--radius);
-  background: var(--surface); border: 1px solid var(--border);
-  position: relative; overflow: hidden;
-}
-.mission-stat-card::before {
-  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-  background: var(--green);
-}
-.ms-val   { font-size: 34px; font-weight: 800; color: var(--green); font-family: var(--mono); line-height: 1; }
-.ms-label { font-size: 13px; color: var(--text-dim); margin-top: 6px; }
-
-/* ── ORIGIN STORY ────────────────────────────────────────────────── */
-.story-section {
-  padding: 80px 0; background: var(--surface);
-  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-}
-.story-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
-.story-visual {
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 8px; padding: 28px; position: relative;
-}
-.story-visual-header {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
-  padding-bottom: 14px; border-bottom: 1px solid var(--border);
-  font-size: 13px; color: var(--text-dim);
-}
-.story-timeline { display: flex; flex-direction: column; gap: 0; }
-.story-tl-item {
-  display: flex; gap: 16px; padding: 14px 0;
-  border-bottom: 1px dashed var(--border);
-}
-.story-tl-item:last-child { border-bottom: none; }
-.stl-year {
-  font-size: 12px; font-weight: 700; color: var(--green); font-family: var(--mono);
-  min-width: 44px; padding-top: 1px;
-}
-.stl-content h4 { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 3px; }
-.stl-content p  { font-size: 11px; color: var(--text-dim); line-height: 1.5; }
 
 /* ── CORE VALUES ─────────────────────────────────────────────────── */
 .values-section { padding: 90px 0; }
@@ -128,25 +85,20 @@
 .team-role { font-size: 11px; color: var(--green); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
 .team-bio  { font-size: 11px; color: var(--text-dim); line-height: 1.55; }
 
-/* ── SCIENCE SECTION ─────────────────────────────────────────────── */
-.science-section { padding: 90px 0; }
-.science-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: start; }
-.science-refs { display: flex; flex-direction: column; gap: 14px; }
-.science-ref {
-  padding: 14px 16px; border-radius: 6px;
-  background: var(--surface); border: 1px solid var(--border);
-  font-size: 12px; color: var(--text-dim); line-height: 1.55;
+/* ── ABOUT CTA SECTION ───────────────────────────────────────────── */
+.science-section {
+  padding: 90px 0; background: var(--surface);
+  border-top: 1px solid var(--border);
 }
-.science-ref .ref-title { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-.science-ref .ref-source { font-size: 10px; color: var(--green); font-family: var(--mono); margin-top: 4px; }
+.about-cta-inner {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; max-width: 560px; margin: 0 auto;
+}
 
 /* ── RESPONSIVE ──────────────────────────────────────────────────── */
 @media (max-width: 860px) {
-  .mission-inner  { grid-template-columns: 1fr; gap: 40px; }
-  .story-inner    { grid-template-columns: 1fr; }
   .values-grid    { grid-template-columns: 1fr 1fr; }
   .team-grid      { grid-template-columns: 1fr 1fr; }
-  .science-inner  { grid-template-columns: 1fr; gap: 40px; }
 }
 @media (max-width: 480px) {
   .values-grid { grid-template-columns: 1fr; }
